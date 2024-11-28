@@ -1,0 +1,90 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+# Reduce redundant runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'  
+          channel: 'stable'
+          cache: true
+      
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Static Analysis
+        run: |
+          dart format --set-exit-if-changed .
+          flutter analyze lib
+          dart fix --apply
+
+  test:
+    needs: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+      
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Unit Tests
+        run: flutter test
+
+      - name: Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+
+  build:
+    needs: [analyze, test]
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: android
+            build-command: flutter build apk --release
+            artifact-path: build/app/outputs/flutter-apk/release/app-release.apk
+          
+          - os: macos-latest
+            platform: ios
+            build-command: flutter build ios --release --no-codesign
+            artifact-path: build/ios/ipa/*.ipa
+          
+          - os: ubuntu-latest
+            platform: web
+            build-command: flutter build web
+            artifact-path: build/web
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+      
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build ${{ matrix.platform }}
+        run: ${{ matrix.build-command }}
+
+      - name: Upload ${{ matrix.platform }} Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}-release
+          path: ${{ matrix.artifact-path }}
