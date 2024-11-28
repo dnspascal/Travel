@@ -1,4 +1,4 @@
-name: Flutter CI/CD
+name: Travel CI/CD
 
 on:
   push:
@@ -86,10 +86,12 @@ jobs:
             build-command: flutter build apk --release
             artifact-path: build/app/outputs/flutter-apk/release/app-release.apk
           
-          - os: macos-latest
-            platform: ios
-            build-command: flutter build ios --release --no-codesign
-            artifact-path: build/ios/ipa/*.ipa
+          # - os: macos-latest
+          #   platform: ios
+          #   build-command: flutter build ios --release --no-codesign
+          #   artifact-path: build/ios/ipa/*.ipa
+
+            
           
           - os: ubuntu-latest
             platform: web
