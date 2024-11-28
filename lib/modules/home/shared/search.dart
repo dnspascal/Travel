@@ -1,34 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:travel/core/controllers/home_controller.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// ignore: must_be_immutable
-class Home extends GetView<HomeController> {
-  Home({super.key});
-
-  bool expandedSearch = false;
-  String? fromLocation;
-  String? toLocation;
-
-  final List<String> tanzanianCities = [
-    'Dar es Salaam',
-    'Dodoma',
-    'Arusha',
-    'Mwanza',
-    'Zanzibar',
-    'Moshi',
-  ];
+class SearchSection extends GetView<HomeController> {
+  const SearchSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(
-      children: [_renderSearchSection(context)],
-    ));
-  }
-
-  Widget _renderSearchSection(context) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -48,40 +27,7 @@ class Home extends GetView<HomeController> {
           _buildHeader(context),
           const SizedBox(height: 16),
           _buildSearchForm(),
-          // const SizedBox(height: 16),
-          // _buildLocationDropdown(
-          //   icon: Icons.location_on,
-          //   hint: 'From',
-          //   value: controller.fromLocation,
-          //   items: controller.tanzanianCities,
-          // ),
-          // const SizedBox(height: 10),
-          // _buildLocationDropdown(
-          //   icon: Icons.arrow_forward,
-          //   hint: 'To',
-          //   value: controller.toLocation,
-          //   items: controller.getAvailableDestinations(),
-          // ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.blue.shade800,
-              padding: const EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              'Search Routes',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-              ),
-            ),
-          )
         ],
       ),
     );
@@ -192,6 +138,25 @@ class Home extends GetView<HomeController> {
           }
           return const SizedBox.shrink();
         }),
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 40),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.blue.shade800,
+            padding: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: const Text(
+            'Search Routes',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 13.0,
+            ),
+          ),
+        )
       ],
     );
   }
