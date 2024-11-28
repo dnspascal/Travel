@@ -153,7 +153,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:travel/modules/auth/controllers/auth_controller.dart';
 import 'package:travel/modules/auth/shared/custom_text_field.dart';
-import 'package:travel/routes/pages.dart';
 import 'package:travel/routes/routes.dart';
 
 // class SignUpView extends GetView<AuthController> {

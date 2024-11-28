@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel/modules/auth/shared/custom_text_field.dart';
 import 'package:travel/modules/auth/shared/social_login.dart';
-import 'package:travel/routes/pages.dart';
 import 'package:travel/routes/routes.dart';
 import '../controllers/auth_controller.dart';
 

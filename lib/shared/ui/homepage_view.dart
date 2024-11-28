@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:travel/core/controllers/language_controller.dart';
-import 'package:get/get.dart';
 import 'package:travel/core/controllers/home_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class Home extends GetView<HomeController> {
   Home({super.key});
 
@@ -191,7 +190,7 @@ class Home extends GetView<HomeController> {
               ],
             );
           }
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }),
       ],
     );
