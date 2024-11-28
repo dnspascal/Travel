@@ -97,10 +97,10 @@ jobs:
 
             
           
-          - os: ubuntu-latest
-            platform: web
-            build-command: flutter build web
-            artifact-path: build/web
+          # - os: ubuntu-latest
+          #   platform: web
+          #   build-command: flutter build web
+          #   artifact-path: build/web
 
     runs-on: ${{ matrix.os }}
     steps:
