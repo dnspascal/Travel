@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:travel/core/controllers/navigation_controller.dart';
 import 'package:travel/shared/ui/app_bar.dart';
+import 'package:travel/shared/ui/bottom_navigation.dart';
 
 class Layout extends GetView<NavigationController> {
   final Widget child;
@@ -11,19 +12,18 @@ class Layout extends GetView<NavigationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  TravelBar(),
-      body: SafeArea(child: child),
-      // bottomNavigationBar: const BottomNavigation(),
+      appBar: TravelBar(),
+      body: SafeArea(child: Container(child: child)),
+      bottomNavigationBar: const BottomNavigation(),
       extendBody: true,
       floatingActionButton: FloatingActionButton(
         onPressed: controller.goToHome,
         backgroundColor: Colors.white,
-        child:  Icon(
+        child: Icon(
           Iconsax.message_text4,
           color: Colors.blue.shade700,
         ),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

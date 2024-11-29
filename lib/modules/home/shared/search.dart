@@ -79,12 +79,12 @@ class SearchSection extends GetView<HomeController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text( 
+        Text(
           AppLocalizations.of(context)!.welcome,
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w900,
-            color: Colors.white, 
+            color: Colors.white,
           ),
         ),
         Obx(() => TextButton(
@@ -125,13 +125,8 @@ class SearchSection extends GetView<HomeController> {
           if (controller.isExpandedSearch.value) {
             return Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(child: _buildDatePicker()),
-                    const SizedBox(width: 8),
-                    Expanded(child: _buildPassengerSelector()),
-                  ],
-                ),
+                _buildDatePicker(),
+                const SizedBox(width: 8),
                 const SizedBox(height: 16),
               ],
             );
@@ -163,7 +158,7 @@ class SearchSection extends GetView<HomeController> {
 
   Widget _buildDatePicker() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2.0),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(12),
@@ -172,65 +167,63 @@ class SearchSection extends GetView<HomeController> {
         children: [
           const Icon(Icons.calendar_today, color: Colors.white),
           const SizedBox(width: 8),
-          Expanded(
-            child: TextButton(
-              onPressed: () async {
-                final DateTime? picked = await showDatePicker(
-                  context: Get.context!,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 365)),
-                );
-                if (picked != null) {
-                  controller.selectedDate.value = picked;
-                }
-              },
-              child: Obx(() => Text(
-                    controller.selectedDate.value == null
-                        ? 'Select Date'
-                        : '${controller.selectedDate.value!.day}/${controller.selectedDate.value!.month}/${controller.selectedDate.value!.year}',
-                    style: const TextStyle(color: Colors.white70),
-                  )),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPassengerSelector() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.people, color: Colors.white),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Obx(() => TextFormField(
-                  keyboardType: TextInputType.number,
-                  initialValue: controller.passengers.value.toString(),
-                  onChanged: (value) {
-                    int? passengers = int.tryParse(value);
-                    if (passengers != null &&
-                        passengers >= 1 &&
-                        passengers <= 5) {
-                      controller.passengers.value = passengers;
-                    }
-                  },
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: 'Passengers',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    border: InputBorder.none,
-                  ),
+          TextButton(
+            onPressed: () async {
+              final DateTime? picked = await showDatePicker(
+                context: Get.context!,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+              );
+              if (picked != null) {
+                controller.selectedDate.value = picked;
+              }
+            },
+            child: Obx(() => Text(
+                  controller.selectedDate.value == null
+                      ? 'Select Date'
+                      : '${controller.selectedDate.value!.day}/${controller.selectedDate.value!.month}/${controller.selectedDate.value!.year}',
+                  style: const TextStyle(color: Colors.white70),
                 )),
           ),
         ],
       ),
     );
   }
+
+  // Widget _buildPassengerSelector() {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withOpacity(0.2),
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         const Icon(Icons.people, color: Colors.white),
+  //         const SizedBox(width: 8),
+  //         Expanded(
+  //           child: Obx(() => TextFormField(
+  //                 keyboardType: TextInputType.number,
+  //                 initialValue: controller.passengers.value.toString(),
+  //                 onChanged: (value) {
+  //                   int? passengers = int.tryParse(value);
+  //                   if (passengers != null &&
+  //                       passengers >= 1 &&
+  //                       passengers <= 5) {
+  //                     controller.passengers.value = passengers;
+  //                   }
+  //                 },
+  //                 style: const TextStyle(color: Colors.white),
+  //                 decoration: const InputDecoration(
+  //                   hintText: 'Passengers',
+  //                   hintStyle: TextStyle(color: Colors.white70),
+  //                   border: InputBorder.none,
+  //                 ),
+  //               )),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

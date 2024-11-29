@@ -72,7 +72,7 @@ class PopularRoutesWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(context),
+            // _buildHeader(context),
             const SizedBox(height: 8.0),
             _buildRoutesList(),
           ],
@@ -81,29 +81,32 @@ class PopularRoutesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Popular Routes',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w900,
-              ),
-        ),
-        GestureDetector(
-          onTap: () {
-            // Add navigation logic here
-          },
-          child: Text(
-            'See All',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.blue.shade900,
-                  fontWeight: FontWeight.w600,
+  Widget buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Popular Routes',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w900,
                 ),
           ),
-        ),
-      ],
+          GestureDetector(
+            onTap: () {
+              // Add navigation logic here
+            },
+            child: Text(
+              'See All',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.blue.shade900,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

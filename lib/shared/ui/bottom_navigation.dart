@@ -67,7 +67,7 @@ class BottomNavigation extends GetView<NavigationController> {
             ),
           ),
         ],
-        backgroundColor: const Color(0xFF4CAF50),
+        backgroundColor: Colors.blue,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10.0)),
         hasNotch: true,
         // fabLocation: StylishBarFabLocation.values,

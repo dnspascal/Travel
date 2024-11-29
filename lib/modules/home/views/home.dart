@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:travel/core/controllers/home_controller.dart';
 import 'package:travel/modules/home/shared/popular.dart';
 import 'package:travel/modules/home/shared/search.dart';
+import 'package:travel/modules/home/shared/special_offer.dart';
 
 // ignore: must_be_immutable
 class Home extends GetView<HomeController> {
@@ -36,17 +37,18 @@ class Home extends GetView<HomeController> {
         company: 'Coastal Services',
         price: 35000,
         duration: '6hrs 15mins'),
-    const RouteModel(
-        id: '3',
-        from: 'Mbeya',
-        to: 'Mwanza',
-        company: 'Coastal Services',
-        price: 95000,
-        duration: '16hrs 15mins'),
+    // const RouteModel(
+    //     id: '3',
+    //     from: 'Mbeya',
+    //     to: 'Mwanza',
+    //     company: 'Coastal Services',
+    //     price: 95000,
+    //     duration: '16hrs 15mins'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final popular = PopularRoutesWidget(popularRoutes: routes);
     return SingleChildScrollView(
         child: Column(
       children: [
@@ -54,9 +56,37 @@ class Home extends GetView<HomeController> {
         const SizedBox(
           height: 16.0,
         ),
+        popular.buildHeader(context),
+        const SizedBox(
+          height: 16.0,
+        ),
         PopularRoutesWidget(
           popularRoutes: routes,
-        )
+        ),
+        const SizedBox(
+          height: 16.0,
+        ),
+        const SpecialOffersWidget(
+          specialOffers: [
+            SpecialOffer(
+              id: '1',
+              title: 'Summer Sale',
+              description: 'Get amazing discounts on all products',
+              discount: '50% OFF',
+            ),
+            SpecialOffer(
+              id: '1',
+              title: 'Summer Sale',
+              description: 'Get amazing discounts on all products',
+              discount: '50% OFF',
+            ),
+          ],
+        ),
+        const SizedBox(height: 16.0),
+        PopularRoutesWidget(
+          popularRoutes: routes,
+        ),
+        const SizedBox(height: 16.0),
       ],
     ));
   }
