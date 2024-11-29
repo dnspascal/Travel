@@ -36,6 +36,13 @@ class Home extends GetView<HomeController> {
         company: 'Coastal Services',
         price: 35000,
         duration: '6hrs 15mins'),
+    const RouteModel(
+        id: '3',
+        from: 'Mbeya',
+        to: 'Mwanza',
+        company: 'Coastal Services',
+        price: 95000,
+        duration: '16hrs 15mins'),
   ];
 
   @override
