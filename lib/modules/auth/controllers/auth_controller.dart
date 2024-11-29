@@ -60,13 +60,13 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
 import 'package:travel/domains/entities/user.dart';
 import 'package:travel/domains/usecases/auth/login_usecase.dart';
 import 'package:travel/domains/usecases/auth/register_usecase.dart';
+import 'package:travel/routes/routes.dart';
 
 class AuthController extends GetxController {
   final RegisterUseCase _registerUseCase;
@@ -115,7 +115,8 @@ class AuthController extends GetxController {
   }
 
   bool validateLoginInputs() {
-    if (emailController.text.isEmpty || !GetUtils.isEmail(emailController.text)) {
+    if (emailController.text.isEmpty ||
+        !GetUtils.isEmail(emailController.text)) {
       errorMessage.value = 'Please enter a valid email';
       return false;
     }
@@ -127,6 +128,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> login() async {
+    Get.toNamed(Routes.home);
     if (!validateLoginInputs()) return;
 
     try {
@@ -148,7 +150,8 @@ class AuthController extends GetxController {
       errorMessage.value = e.message;
       Get.snackbar(
         'Error',
-        e.message ?? 'An error occurred', // Added null check with default message
+        e.message ??
+            'An error occurred', // Added null check with default message
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -181,7 +184,8 @@ class AuthController extends GetxController {
       errorMessage.value = e.message;
       Get.snackbar(
         'Error',
-        e.message ?? 'Registration failed', // Added null check with default message
+        e.message ??
+            'Registration failed', // Added null check with default message
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

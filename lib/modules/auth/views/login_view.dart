@@ -94,7 +94,7 @@ class LoginView extends GetView<AuthController> {
               const SizedBox(height: 24),
               Center(
                 child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.initial),
+                  onTap: () => Get.toNamed(Routes.register),
                   child: RichText(
                     text: TextSpan(
                       text: 'Don\'t have an account? ',

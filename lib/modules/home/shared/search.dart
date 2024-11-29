@@ -79,12 +79,12 @@ class SearchSection extends GetView<HomeController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        Text( 
           AppLocalizations.of(context)!.welcome,
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.white, 
           ),
         ),
         Obx(() => TextButton(
