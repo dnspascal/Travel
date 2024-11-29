@@ -7,15 +7,12 @@ class TravelBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-
       automaticallyImplyLeading: false,
       elevation: 30.0,
       backgroundColor: Colors.transparent,
       flexibleSpace: Container(
-
         color: Colors.white,
         // decoration: const BoxDecoration(
-
         //   gradient: LinearGradient(
         //     begin: Alignment.centerLeft,
         //     end: Alignment.centerRight,
@@ -29,17 +26,24 @@ class TravelBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Icon(
-            Iconsax.menu,
-            color: Colors.black,
-          ),
-          const Text(
-            'Travel',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              Image.asset(
+                'assets/icons/app/app-icon.png',
+                width: 20.0,
+              ),
+              const SizedBox(
+                width: 8.0,
+              ),
+              const Text(
+                'Travel',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
           ),
           Stack(
             clipBehavior: Clip.none,
