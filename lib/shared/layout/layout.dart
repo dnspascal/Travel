@@ -11,7 +11,7 @@ class Layout extends GetView<NavigationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TravelBar(),
+      appBar:  TravelBar(),
       body: SafeArea(child: child),
       // bottomNavigationBar: const BottomNavigation(),
       extendBody: true,

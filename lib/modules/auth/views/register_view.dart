@@ -542,7 +542,7 @@ class SignUpView extends GetView<AuthController> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -551,7 +551,8 @@ class SignUpView extends GetView<AuthController> {
                       'Sign Up',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w900
                       ),
                     ),
                   ),
@@ -601,6 +602,7 @@ class SignUpView extends GetView<AuthController> {
                         'Sign In',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w300
                         ),
                       ),
                     ),

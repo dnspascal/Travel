@@ -24,7 +24,7 @@ class LoginView extends GetView<AuthController> {
               Row(
                 children: [
                   Text(
-                    'Log in',
+                    'Sign In',
                     style: Get.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -79,16 +79,21 @@ class LoginView extends GetView<AuthController> {
                 ],
               ),
               const SizedBox(height: 24),
-              Obx(() => SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed:
-                          controller.isLoading.value ? null : controller.login,
-                      child: controller.isLoading.value
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('Sign In'),
-                    ),
-                  )),
+              Obx(() => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 40),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                ),
+                onPressed:
+                    controller.isLoading.value ? null : controller.login,
+                child: controller.isLoading.value
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        'Sign In',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900, fontSize: 18.0),
+                      ),
+              )),
               const SizedBox(height: 24),
               const SocialLoginSection(),
               const SizedBox(height: 24),
@@ -105,7 +110,7 @@ class LoginView extends GetView<AuthController> {
                           text: 'Sign up',
                           style: TextStyle(
                             color: Get.theme.primaryColor,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w300,
                           ),
                         ),
                       ],

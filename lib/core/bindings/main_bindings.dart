@@ -6,7 +6,7 @@ import 'package:travel/core/controllers/navigation_controller.dart';
 class MainBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(LocaleController());
+    Get.put(LocaleController(), permanent: true);
     Get.put(NavigationController(), permanent: true);
     Get.put(HomeController());
 
