@@ -83,7 +83,7 @@ class SearchSection extends GetView<HomeController> {
           AppLocalizations.of(context)!.welcome,
           style: const TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w900,
             color: Colors.white, 
           ),
         ),
@@ -152,7 +152,7 @@ class SearchSection extends GetView<HomeController> {
           child: const Text(
             'Search Routes',
             style: TextStyle(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w900,
               fontSize: 13.0,
             ),
           ),
