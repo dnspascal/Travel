@@ -15,7 +15,8 @@ class RegisterUseCase {
   Future<User> execute({
     required String email,
     required String password,
-    required String name,
+    required String firstName,
+    required String secondName,
     required String phoneNumber,
   }) async {
     // Validate email
@@ -34,7 +35,8 @@ class RegisterUseCase {
     //   throw ValidationException('Name must be at least 2 characters');
     // }
 
-    return _authRepository.register(email, password, name, phoneNumber);
+    return _authRepository.register(
+        email, password, firstName, secondName, phoneNumber);
   }
 }
 

@@ -27,7 +27,6 @@ class SpecialOffersWidget extends StatelessWidget {
               ),
               SvgPicture.asset(
                 'assets/icons/svg/gift.svg', // Replace with your gift icon path
-                color: Colors.blue[600],
                 width: 24,
                 height: 24,
               ),

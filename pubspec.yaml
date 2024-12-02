@@ -48,13 +48,15 @@ dependencies:
   iconsax: ^0.0.8
   shared_preferences: ^2.3.3
   get_storage: ^2.1.1
+  google_fonts: ^6.2.1
+  logger: ^2.5.0
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icons/app/app-icon.png"
+  image_path: "assets/icons/app/world.png"
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/icons/app/app-icon.png"
+  adaptive_icon_foreground: "assets/icons/app/world.png"
   remove_alpha_ios: true
 
 dev_dependencies:

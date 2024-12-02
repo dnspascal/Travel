@@ -11,7 +11,8 @@ class SearchSection extends GetView<HomeController> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.blue.shade600, Colors.purple.shade600],
+          // colors: [Colors.blue.shade600, Colors.purple.shade600],
+          colors: [Colors.blue.shade600, Colors.blue.shade900],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),

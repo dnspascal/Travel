@@ -1,20 +1,23 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
 
 class ApiService {
   final Dio _dio;
   final FlutterSecureStorage _secureStorage;
+  var logger = Logger();
 
   ApiService(this._dio, this._secureStorage) {
     _setupInterceptors();
+    _dio.options.baseUrl = 'https://monarch-live-quickly.ngrok-free.app/';
   }
 
   void _setupInterceptors() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = await _secureStorage.read(key: 'auth_token');  // Specify 'key'
+        final token = await _secureStorage.read(key: 'auth_token');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
@@ -22,7 +25,6 @@ class ApiService {
       },
       onError: (error, handler) {
         if (error.response?.statusCode == 401) {
-          // Handle token expiration
           _handleTokenExpiration();
         }
         return handler.next(error);
@@ -31,20 +33,24 @@ class ApiService {
   }
 
   Future<void> _handleTokenExpiration() async {
-    await _secureStorage.delete(key: 'auth_token');  // Specify 'key'
+    await _secureStorage.delete(key: 'auth_token');
     Get.offAllNamed('/login');
   }
 
   Future<Map<String, dynamic>> post(
       String endpoint, Map<String, dynamic> data) async {
     try {
+      logger.w(endpoint);
       final response = await _dio.post(endpoint, data: data);
+      logger.i("API Response: ${response.data}");
+
       return response.data;
     } on DioException catch (e) {
+      logger.e("THIS IS THE ERROR MESSAGE ${e.message}");
+      logger.e("THIS IS THE ERROR MESSAGE ${e.response?.data}");
+      logger.i(data);
       throw ApiException.fromDioError(e);
-    } finally {
-      // You can add any cleanup logic here if needed
-    }
+    } finally {}
   }
 }
 

@@ -75,7 +75,8 @@ class AuthController extends GetxController {
   // Controllers for text fields
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final nameController = TextEditingController();
+  final firstController = TextEditingController();
+  final secondController = TextEditingController();
   final phoneController = TextEditingController();
 
   // Observable variables
@@ -97,7 +98,8 @@ class AuthController extends GetxController {
   void onClose() {
     emailController.dispose();
     passwordController.dispose();
-    nameController.dispose();
+    firstController.dispose();
+    secondController.dispose();
     phoneController.dispose();
     super.onClose();
   }
@@ -164,7 +166,8 @@ class AuthController extends GetxController {
   Future<void> register({
     required String email,
     required String password,
-    required String name,
+    required String firstName,
+    required String secondName,
     required String phoneNumber,
   }) async {
     try {
@@ -174,7 +177,8 @@ class AuthController extends GetxController {
       final registeredUser = await _registerUseCase.execute(
         email: email,
         password: password,
-        name: name,
+        firstName: firstName,
+        secondName: secondName,
         phoneNumber: phoneNumber,
       );
 
@@ -184,8 +188,7 @@ class AuthController extends GetxController {
       errorMessage.value = e.message;
       Get.snackbar(
         'Error',
-        e.message ??
-            'Registration failed', // Added null check with default message
+        e.message ?? 'Registration failed',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

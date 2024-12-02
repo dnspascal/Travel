@@ -12,17 +12,17 @@ class AuthRepository implements IAuthRepository {
   AuthRepository(this._apiService, this._secureStorage);
 
   @override
-  Future<User> register(
-      String email, String password, String name, String phoneNumber) async {
+  Future<User> register(String email, String password, String firstName,
+      String secondName, String phoneNumber) async {
     try {
-      final response = await _apiService.post('/auth/register', {
+      final response = await _apiService.post('/register', {
         'email': email,
         'password': password,
-        'name': name,
+        'first_name': firstName,
+        'last_name': secondName,
         'phone_number': phoneNumber,
       });
 
-      // Store auth token
       await _secureStorage.write(key: 'auth_token', value: response['token']);
 
       final userDto = UserDTO.fromJson(response['user']);
