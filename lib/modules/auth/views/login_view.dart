@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travel/modules/auth/controllers/login_controller.dart';
 import 'package:travel/modules/auth/shared/custom_text_field.dart';
 import 'package:travel/modules/auth/shared/social_login.dart';
 import 'package:travel/routes/routes.dart';
-import '../controllers/auth_controller.dart';
+import 'package:travel/shared/loaders/spinner.dart';
 
-class LoginView extends GetView<AuthController> {
+class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
 
   @override
@@ -47,15 +48,13 @@ class LoginView extends GetView<AuthController> {
                 prefixIcon: Icons.email_outlined,
               ),
               const SizedBox(height: 16),
-              // Obx(() =>
-              CustomTextField(
-                controller: controller.passwordController,
-                label: 'Password',
-                hint: '••••••••',
-                prefixIcon: Icons.lock_outline,
-                isPassword: true,
-                // )
-              ),
+            CustomTextField(
+                    controller: controller.passwordController,
+                    label: 'Password',
+                    hint: 'Enter your password',
+                    prefixIcon: Icons.lock_outline,
+                    isPassword: true,
+                  ),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -80,20 +79,21 @@ class LoginView extends GetView<AuthController> {
               ),
               const SizedBox(height: 24),
               Obx(() => ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 40),
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-                ),
-                onPressed:
-                    controller.isLoading.value ? null : controller.login,
-                child: controller.isLoading.value
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'Sign In',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900, fontSize: 18.0),
-                      ),
-              )),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 40),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 16),
+                    ),
+                    onPressed:
+                        controller.isLoading.value ? null : controller.login,
+                    child: controller.isLoading.value
+                        ? const LoadingState(color: Colors.white)
+                        : const Text(
+                            'Sign In',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 18.0),
+                          ),
+                  )),
               const SizedBox(height: 24),
               const SocialLoginSection(),
               const SizedBox(height: 24),
@@ -110,7 +110,7 @@ class LoginView extends GetView<AuthController> {
                           text: 'Sign up',
                           style: TextStyle(
                             color: Get.theme.primaryColor,
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

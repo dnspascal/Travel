@@ -26,15 +26,15 @@ class AppTheme {
     return ThemeData(
       primaryColor: const Color(0xFF2D8EFF),
       scaffoldBackgroundColor: Colors.white,
-      textTheme: GoogleFonts.sofiaSansTextTheme(),
-      fontFamily: 'Aptos',
+      textTheme: GoogleFonts.quicksandTextTheme(),
+      // fontFamily: 'Aptos',
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.all(16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+          borderSide: const BorderSide(color: Color(0xFF2D8EFF)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

@@ -61,14 +61,15 @@ class SignUpView extends GetView<AuthController> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: controller.secondController,
-                  label: 'Second Name',
-                  hint: 'Enter your Second Name',
+                  label: 'Last Name',
+                  hint: 'Enter your Last Name',
                   prefixIcon: Icons.person_outline,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your second name';
+                      return 'Please enter your last name';
                     }
                     return null;
                   },
@@ -126,7 +127,7 @@ class SignUpView extends GetView<AuthController> {
                 CustomTextField(
                   controller: _passwordController,
                   label: 'Password',
-                  hint: '••••••••',
+                  hint: 'Enter your password',
                   prefixIcon: Icons.lock_outline,
                   isPassword: true,
                   validator: (value) {
@@ -143,7 +144,7 @@ class SignUpView extends GetView<AuthController> {
                 CustomTextField(
                   controller: _confirmPasswordController,
                   label: 'Confirm Password',
-                  hint: '••••••••',
+                  hint: 'Confirm your password',
                   prefixIcon: Icons.lock_outline,
                   isPassword: true,
                   validator: (value) {
@@ -171,28 +172,7 @@ class SignUpView extends GetView<AuthController> {
                   height: 50.0,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        if (!_acceptTerms.value) {
-                          Get.snackbar(
-                            'Error',
-                            'Please accept the terms and conditions',
-                            snackPosition: SnackPosition.TOP,
-                            backgroundColor: Colors.red,
-                            colorText: Colors.white,
-                          );
-                          return;
-                        }
-                        final phoneNumber =
-                            '255${controller.phoneController.text}';
-
-                        controller.register(
-                          email: controller.emailController.text,
-                          password: _passwordController.text,
-                          firstName: controller.firstController.text,
-                          secondName: controller.secondController.text,
-                          phoneNumber: phoneNumber,
-                        );
-                      }
+                      register();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
@@ -259,7 +239,7 @@ class SignUpView extends GetView<AuthController> {
                         'Sign In',
                         style: TextStyle(
                             color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w800),
                       ),
                     ),
                   ],
@@ -294,5 +274,29 @@ class SignUpView extends GetView<AuthController> {
         width: 24,
       ),
     );
+  }
+
+  void register() {
+    if (_formKey.currentState?.validate() ?? false) {
+      if (!_acceptTerms.value) {
+        Get.snackbar(
+          'Error',
+          'Please accept the terms and conditions',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
+      final phoneNumber = '255${controller.phoneController.text}';
+
+      controller.register(
+        email: controller.emailController.text,
+        password: _passwordController.text,
+        firstName: controller.firstController.text,
+        secondName: controller.secondController.text,
+        phoneNumber: phoneNumber,
+      );
+    }
   }
 }

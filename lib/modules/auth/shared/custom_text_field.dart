@@ -1,56 +1,7 @@
-// import 'package:flutter/material.dart';
-
-// class CustomTextField extends StatelessWidget {
-//   final TextEditingController controller;
-//   final String label;
-//   final String hint;
-//   final IconData prefixIcon;
-//   final bool isPassword;
-
-//   const CustomTextField({
-//     super.key,
-//     required this.controller,
-//     required this.label,
-//     required this.hint,
-//     required this.prefixIcon,
-//     this.isPassword = false,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text(
-//           label,
-//           style: const TextStyle(fontWeight: FontWeight.w500),
-//         ),
-//         const SizedBox(height: 8),
-//         TextField(
-//           controller: controller,
-//           obscureText: isPassword,
-//           decoration: InputDecoration(
-//             hintText: hint,
-//             prefixIcon: Icon(prefixIcon, color: Colors.grey),
-//             suffixIcon: isPassword
-//                 ? IconButton(
-//                     icon: const Icon(Icons.visibility_off),
-//                     onPressed: () {},
-//                   )
-//                 : null,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
@@ -75,28 +26,49 @@ class CustomTextField extends StatelessWidget {
   });
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool _isObscured = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _isObscured = widget.isPassword; // Initialize with the isPassword value
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          widget.label,
           style: const TextStyle(fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 8),
         TextFormField(
-          controller: controller,
-          obscureText: isPassword,
-          validator: validator,
-          inputFormatters: inputFormatters,
-          keyboardType: keyboardType,
+          controller: widget.controller,
+          obscureText: _isObscured,
+          validator: widget.validator,
+          inputFormatters: widget.inputFormatters,
+          keyboardType: widget.keyboardType,
           decoration: InputDecoration(
-            hintText: hint,
-            prefixIcon: prefix ?? Icon(prefixIcon, color: Colors.grey),
-            suffixIcon: isPassword
-                ? IconButton(
-                    icon: const Icon(Icons.visibility_off),
-                    onPressed: () {},
+            hintText: widget.hint,
+            prefixIcon:
+                widget.prefix ?? Icon(widget.prefixIcon, color: Colors.grey),
+            suffixIcon: widget.isPassword
+                ? TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isObscured = !_isObscured;
+                      });
+                    },
+                    child: Text(
+                      _isObscured ? 'Show' : 'Hide',
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   )
                 : null,
             border: OutlineInputBorder(
