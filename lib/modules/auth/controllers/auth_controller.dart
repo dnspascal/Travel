@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
 import 'package:travel/domains/entities/user.dart';
-import 'package:travel/domains/usecases/auth/login_usecase.dart';
 import 'package:travel/domains/usecases/auth/register_usecase.dart';
-import 'package:travel/routes/routes.dart';
 
 class AuthController extends GetxController {
   final RegisterUseCase _registerUseCase;
-  final LoginUseCase _loginUseCase;
 
   // Controllers for text fields
   final emailController = TextEditingController();
@@ -23,7 +20,7 @@ class AuthController extends GetxController {
   final errorMessage = RxnString();
   final isPasswordVisible = false.obs;
 
-  AuthController(this._registerUseCase, this._loginUseCase);
+  AuthController(this._registerUseCase);
 
   @override
   void onInit() {

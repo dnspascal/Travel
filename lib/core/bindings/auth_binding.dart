@@ -40,7 +40,6 @@ class AuthBinding extends Bindings {
     Get.lazyPut<IUser>(() => UserRepository(
           Get.find(),
         ));
-  
 
     // // Use cases
     Get.lazyPut(() => RegisterUseCase(
@@ -59,7 +58,6 @@ class AuthBinding extends Bindings {
 
     // // Controllers
     Get.lazyPut(() => AuthController(
-          Get.find(),
           Get.find(),
         ));
   }

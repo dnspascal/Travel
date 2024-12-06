@@ -1,4 +1,3 @@
-import 'package:travel/domains/entities/user.dart';
 import 'package:travel/domains/repositories/auth_repository.dart';
 
 class LoginUseCase {
