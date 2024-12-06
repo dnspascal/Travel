@@ -38,17 +38,19 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<User> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     try {
-      final response = await _apiService.post('/auth/login', {
+      final response = await _apiService.post('/login', {
         'email': email,
         'password': password,
       });
 
-      await _secureStorage.write(key: 'auth_token', value: response['token']);
+      await _secureStorage.write(
+          key: 'access_token', value: response['access']);
+      await _secureStorage.write(
+          key: 'refresh_token', value: response['refresh']);
 
-      final userDto = UserDTO.fromJson(response['user']);
-      return userDto.toDomain();
+      
     } on ApiException catch (e) {
       if (e.statusCode == 401) {
         throw ApiException('Invalid email or password');

@@ -3,17 +3,26 @@ import 'package:dio/dio.dart';
 class ApiException implements Exception {
   final String? message;
   final int? statusCode;
+  final String? responseBody;  
 
-  ApiException(this.message, {this.statusCode});
+  ApiException(this.message, {this.statusCode, this.responseBody});
 
   @override
   String toString() {
-    return 'ApiException: $message';
+    return 'ApiException: $message (Status code: $statusCode)';
   }
 
-  // You can add more logic here to handle different error cases
   static ApiException fromDioError(DioException error) {
-    // Here you can transform Dio error into your custom ApiException
-    return ApiException(error.message, statusCode: error.response?.statusCode);
+    String? responseBody;
+
+    if (error.response != null && error.response!.data != null) {
+      responseBody = error.response!.data.toString();
+    }
+
+    return ApiException(
+      error.message,
+      statusCode: error.response?.statusCode,
+      responseBody: responseBody,
+    );
   }
 }

@@ -46,15 +46,48 @@ class LoginView extends GetView<LoginController> {
                 label: 'Email',
                 hint: 'Enter your email',
                 prefixIcon: Icons.email_outlined,
+                onChanged: (value) => controller.emailErrorMessage.value = '',
               ),
+              Obx(() {
+                if (controller.emailErrorMessage.value.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      controller.emailErrorMessage.value,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
               const SizedBox(height: 16),
-            CustomTextField(
-                    controller: controller.passwordController,
-                    label: 'Password',
-                    hint: 'Enter your password',
-                    prefixIcon: Icons.lock_outline,
-                    isPassword: true,
-                  ),
+              CustomTextField(
+                controller: controller.passwordController,
+                label: 'Password',
+                hint: 'Enter your password',
+                prefixIcon: Icons.lock_outline,
+                isPassword: true,
+                onChanged: (value) =>
+                    controller.passwordErrorMessage.value = '',
+              ),
+              Obx(() {
+                if (controller.passwordErrorMessage.value.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      controller.passwordErrorMessage.value,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
               const SizedBox(height: 16),
               Row(
                 children: [

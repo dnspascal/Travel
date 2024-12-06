@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
   final Widget? prefix;
+  final ValueChanged<String>? onChanged;
 
   const CustomTextField({
     super.key,
@@ -23,6 +24,7 @@ class CustomTextField extends StatefulWidget {
     this.inputFormatters,
     this.keyboardType,
     this.prefix,
+    this.onChanged,
   });
 
   @override
@@ -35,7 +37,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     super.initState();
-    _isObscured = widget.isPassword; // Initialize with the isPassword value
+    _isObscured = widget.isPassword;
   }
 
   @override
@@ -49,33 +51,41 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          controller: widget.controller,
-          obscureText: _isObscured,
-          validator: widget.validator,
-          inputFormatters: widget.inputFormatters,
-          keyboardType: widget.keyboardType,
-          decoration: InputDecoration(
-            hintText: widget.hint,
-            prefixIcon:
-                widget.prefix ?? Icon(widget.prefixIcon, color: Colors.grey),
-            suffixIcon: widget.isPassword
-                ? TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isObscured = !_isObscured;
-                      });
-                    },
-                    child: Text(
-                      _isObscured ? 'Show' : 'Hide',
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  )
-                : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+            controller: widget.controller,
+            obscureText: _isObscured,
+            validator: widget.validator,
+            inputFormatters: widget.inputFormatters,
+            keyboardType: widget.keyboardType,
+            decoration: InputDecoration(
+              hintText: widget.hint,
+              prefixIcon:
+                  widget.prefix ?? Icon(widget.prefixIcon, color: Colors.grey),
+              suffixIcon: widget.isPassword
+                  ? TextButton(
+                      style: TextButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        foregroundColor: Colors.black,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isObscured = !_isObscured;
+                        });
+                      },
+                      child: Text(
+                        _isObscured ? 'Show' : 'Hide',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    )
+                  : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-          ),
-        ),
+            onChanged: (value) {
+              if (widget.onChanged != null) {
+                widget.onChanged!(value);
+              }
+            }),
       ],
     );
   }

@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
 
 class ApiService {
@@ -9,50 +9,92 @@ class ApiService {
   final FlutterSecureStorage _secureStorage;
   var logger = Logger();
 
+  String? _accessToken;
+
   ApiService(this._dio, this._secureStorage) {
     _setupInterceptors();
-    _dio.options.baseUrl = 'https://monarch-live-quickly.ngrok-free.app/';
+    _dio.options.baseUrl = 'https://8974-197-250-225-144.ngrok-free.app/';
   }
 
   void _setupInterceptors() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = await _secureStorage.read(key: 'auth_token');
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token';
+        _accessToken ??= await _secureStorage.read(key: 'access_token');
+        if (_accessToken != null) {
+          options.headers['Authorization'] = 'Bearer $_accessToken';
         }
         return handler.next(options);
       },
-      onError: (error, handler) {
+      onError: (error, handler) async {
         if (error.response?.statusCode == 401) {
-          _handleTokenExpiration();
+          // Try refreshing the token
+          final isRefreshed = await _handleTokenExpiration();
+          if (isRefreshed) {
+            // Retry the failed request with the new token
+            final options = error.response!.requestOptions;
+            options.headers['Authorization'] = 'Bearer $_accessToken';
+            final retryResponse = await _dio.request(options.path,
+                options: Options(
+                  method: options.method,
+                  headers: options.headers,
+                  contentType: options.contentType,
+                ),
+                data: options.data,
+                queryParameters: options.queryParameters);
+            return handler.resolve(retryResponse);
+          } else {
+            Get.offAllNamed('/login'); // Redirect to login if refresh fails
+          }
         }
         return handler.next(error);
       },
     ));
   }
 
-  Future<void> _handleTokenExpiration() async {
-    await _secureStorage.delete(key: 'auth_token');
-    Get.offAllNamed('/login');
+  Future<bool> _handleTokenExpiration() async {
+    try {
+      final refreshToken = await _secureStorage.read(key: 'refresh_token');
+      if (refreshToken == null) return false;
+
+      final response = await _dio.post('/auth/refresh', data: {
+        'refresh_token': refreshToken,
+      });
+
+      final newAccessToken = response.data['access_token'];
+      if (newAccessToken != null) {
+        // Save new access token
+        _accessToken = newAccessToken;
+        await _secureStorage.write(key: 'access_token', value: newAccessToken);
+        return true;
+      }
+    } catch (e) {
+      logger.e('Failed to refresh token', error: e);
+    }
+    return false;
   }
 
-  Future<Map<String, dynamic>> post(
-      String endpoint, Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
+      {Map<String, dynamic>? headers}) async {
     try {
-      logger.w(endpoint);
-      final response = await _dio.post(endpoint, data: data);
-      logger.i("API Response: ${response.data}");
-
+      final response = await _dio.post(endpoint,
+          data: data, options: Options(headers: headers));
       return response.data;
     } on DioException catch (e) {
-      logger.e("THIS IS THE ERROR MESSAGE ${e.message}");
-      logger.e("THIS IS THE ERROR MESSAGE ${e.response?.data}");
-      logger.i(data);
       throw ApiException.fromDioError(e);
-    } finally {}
+    }
+  }
+
+  Future get(String endpoint, {Map<String, dynamic>? headers}) async {
+    try {
+      final response =
+          await _dio.get(endpoint, options: Options(headers: headers));
+      return response.data;
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
   }
 }
+
 
 
 

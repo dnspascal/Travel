@@ -10,7 +10,7 @@ class LoginUseCase {
     // this._emailValidator
   );
 
-  Future<User> execute(String email, String password) async {
+  Future<void> execute(String email, String password) async {
     // if (!_emailValidator.isValid(email)) {
     //   throw ValidationException('Invalid email format');
     // }
