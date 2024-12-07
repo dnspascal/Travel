@@ -4,6 +4,7 @@ import 'package:travel/modules/auth/controllers/login_controller.dart';
 import 'package:travel/modules/auth/shared/custom_text_field.dart';
 import 'package:travel/modules/auth/shared/social_login.dart';
 import 'package:travel/routes/routes.dart';
+import 'package:travel/shared/loaders/dots.dart';
 import 'package:travel/shared/loaders/spinner.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -113,14 +114,20 @@ class LoginView extends GetView<LoginController> {
               const SizedBox(height: 24),
               Obx(() => ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 40),
+                      minimumSize: const Size(double.infinity, 50),
                       padding: const EdgeInsets.symmetric(
                           vertical: 5, horizontal: 16),
                     ),
                     onPressed:
                         controller.isLoading.value ? null : controller.login,
                     child: controller.isLoading.value
-                        ? const LoadingState(color: Colors.white)
+                        ? const SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 1,
+                            ))
                         : const Text(
                             'Sign In',
                             style: TextStyle(

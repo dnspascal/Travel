@@ -27,7 +27,6 @@ class AppTheme {
       primaryColor: const Color(0xFF2D8EFF),
       scaffoldBackgroundColor: Colors.white,
       textTheme: GoogleFonts.quicksandTextTheme(),
-      // fontFamily: 'Aptos',
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
@@ -38,7 +37,7 @@ class AppTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+          borderSide: const BorderSide(color: Color(0xFF9CA3AF)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

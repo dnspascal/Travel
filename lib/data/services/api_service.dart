@@ -13,7 +13,7 @@ class ApiService {
 
   ApiService(this._dio, this._secureStorage) {
     _setupInterceptors();
-    _dio.options.baseUrl = 'https://8974-197-250-225-144.ngrok-free.app/';
+    _dio.options.baseUrl = 'https://monarch-live-quickly.ngrok-free.app/';
   }
 
   void _setupInterceptors() {
@@ -43,7 +43,7 @@ class ApiService {
                 queryParameters: options.queryParameters);
             return handler.resolve(retryResponse);
           } else {
-            Get.offAllNamed('/login'); // Redirect to login if refresh fails
+            Get.offAllNamed('/login'); 
           }
         }
         return handler.next(error);
