@@ -78,7 +78,7 @@ class LoginController extends GetxController {
 
     try {
       isLoading.value = true;
-      // errorMessage.value = null;
+      errorMessage.value = "";
 
       await _loginUseCase.execute(
         emailController.text.trim(),
@@ -90,15 +90,15 @@ class LoginController extends GetxController {
       }
 
       final userData = await _getUserUseCase.call();
-      print(userData);
-      // user.value = userData;
+      user.value = userData;
 
       Get.offAllNamed(Routes.home);
-    } on ApiException catch (e) {
+    } on ApiException catch (e, stackTrace) {
       errorMessage.value = e.message ?? '';
 
-      print(e.message); // Print detailed error message
-      print("Response status code: ${e.statusCode}"); // Print the status code
+      print(e.message);
+      print(stackTrace);
+      print("Response status code: ${e.statusCode}");
       print("Response body: ${e.responseBody}");
 
       ScaffoldMessenger.of(Get.context!).showSnackBar(

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:travel/core/bindings/user_binding.dart';
+import 'package:travel/modules/profile/views/profile.dart';
 import 'package:travel/routes/routes.dart';
 import 'package:travel/shared/layout/layout.dart';
 import 'package:travel/modules/home/views/home.dart';
@@ -22,6 +24,11 @@ class Pages {
       name: Routes.home,
       page: () => Layout(child: Home()),
       // binding: AuthBinding(),
+    ),
+    GetPage(
+      name: Routes.PROFILE,
+      page: () =>  BusTicketProfile(),
+      binding: UserBinding(),
     ),
   ];
 }

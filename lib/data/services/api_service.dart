@@ -1,55 +1,64 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
 
 class ApiService {
   final Dio _dio;
   final FlutterSecureStorage _secureStorage;
-  var logger = Logger();
 
   String? _accessToken;
+  final List<String> _publicEndpoints = ['/login', '/register'];
 
   ApiService(this._dio, this._secureStorage) {
     _setupInterceptors();
     _dio.options.baseUrl = 'https://monarch-live-quickly.ngrok-free.app/';
   }
 
-  void _setupInterceptors() {
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
+void _setupInterceptors() {
+  _dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) async {
+      print("Intercepting request for path: ${options.path}");
+      if (!_publicEndpoints.any((endpoint) => options.path.contains(endpoint))) {
+        print("Private endpoint detected");
         _accessToken ??= await _secureStorage.read(key: 'access_token');
         if (_accessToken != null) {
           options.headers['Authorization'] = 'Bearer $_accessToken';
+          print("Authorization header added: Bearer $_accessToken");
+        } else {
+          print("No access token available for private endpoint");
         }
-        return handler.next(options);
-      },
-      onError: (error, handler) async {
-        if (error.response?.statusCode == 401) {
-          // Try refreshing the token
-          final isRefreshed = await _handleTokenExpiration();
-          if (isRefreshed) {
-            // Retry the failed request with the new token
-            final options = error.response!.requestOptions;
-            options.headers['Authorization'] = 'Bearer $_accessToken';
-            final retryResponse = await _dio.request(options.path,
-                options: Options(
-                  method: options.method,
-                  headers: options.headers,
-                  contentType: options.contentType,
-                ),
-                data: options.data,
-                queryParameters: options.queryParameters);
-            return handler.resolve(retryResponse);
-          } else {
-            Get.offAllNamed('/login'); 
-          }
+      }
+      handler.next(options);
+    },
+    onError: (error, handler) async {
+      if (error.response?.statusCode == 401) {
+        final isRefreshed = await _handleTokenExpiration();
+        if (isRefreshed) {
+          final options = error.response!.requestOptions;
+          options.headers['Authorization'] = 'Bearer $_accessToken';
+          final retryResponse = await _dio.request(
+            options.path,
+            options: Options(
+              method: options.method,
+              headers: options.headers,
+              contentType: options.contentType,
+            ),
+            data: options.data,
+            queryParameters: options.queryParameters,
+          );
+          return handler.resolve(retryResponse);
+        } else {
+          Get.offAllNamed('/login');
         }
-        return handler.next(error);
-      },
-    ));
-  }
+      }
+      handler.next(error);
+    },
+  ));
+}
+
+
+
 
   Future<bool> _handleTokenExpiration() async {
     try {
@@ -62,49 +71,78 @@ class ApiService {
 
       final newAccessToken = response.data['access_token'];
       if (newAccessToken != null) {
-        // Save new access token
         _accessToken = newAccessToken;
         await _secureStorage.write(key: 'access_token', value: newAccessToken);
         return true;
       }
-    } catch (e) {
-      logger.e('Failed to refresh token', error: e);
-    }
+      // ignore: empty_catches
+    } catch (e) {}
     return false;
   }
 
   Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
       {Map<String, dynamic>? headers}) async {
     try {
-      final response = await _dio.post(endpoint,
-          data: data, options: Options(headers: headers));
+      if (!_publicEndpoints.contains(endpoint) && headers == null) {
+        throw ApiException('Headers are required for this endpoint.');
+      }
+
+      final response = await _dio.post(
+        endpoint,
+        data: data,
+        options: Options(headers: headers),
+      );
       return response.data;
-    } on DioException catch (e) {
-      throw ApiException.fromDioError(e);
+    } catch (e) {
+      if (e is DioException) {
+        final errorData = e.response?.data;
+        if (errorData != null) {
+          final errorMessage = errorData['message'] ?? 'Unknown error';
+          final errorStatus = errorData['status'] ?? 3;
+
+          throw ApiException(
+            errorMessage,
+            statusCode: errorStatus,
+          );
+        }
+        throw ApiException.fromDioError(e);
+      } else {
+        throw ApiException('Unknown error: ${e.toString()}');
+      }
     }
   }
 
   Future get(String endpoint, {Map<String, dynamic>? headers}) async {
-    try {
-      final response =
-          await _dio.get(endpoint, options: Options(headers: headers));
-      return response.data;
-    } on DioException catch (e) {
-      throw ApiException.fromDioError(e);
-    }
+  try {
+    final response = await _dio.get(endpoint, options: Options(headers: headers));
+    return response.data;
+  } on DioException catch (e) {
+    throw ApiException.fromDioError(e);
   }
 }
 
 
+  // Future get(String endpoint, {Map<String, dynamic>? headers}) async {
+  //   try {
+  //     print("THIS ARE HEASERS");
+  //     print(headers);
+  //     if (!_publicEndpoints.contains(endpoint) && headers == null) {
+  //       throw ApiException('Headers are required for this endpoint.');
+  //     }
 
-
-
+  //     final response =
+  //         await _dio.get(endpoint, options: Options(headers: headers));
+  //     return response.data;
+  //   } on DioException catch (e) {
+  //     throw ApiException.fromDioError(e);
+  //   }
+  // }
+}
 
 // import 'package:get/get.dart';
 // import 'package:dio/dio.dart';
 // import 'dart:async';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 
 // class ApiService {
 //   final Dio _dio;
@@ -157,7 +195,7 @@ class ApiService {
 //                 await _refreshToken();
 //                 _isRefreshing = false;
 //                 _refreshTokenSubject.add(null);
-                
+
 //                 // Retry the original request
 //                 final retryResponse = await _retry(error.requestOptions);
 //                 return handler.resolve(retryResponse);
@@ -249,24 +287,24 @@ class ApiService {
 //           queryParameters: queryParameters,
 //           options: options?.copyWith(method: method) ?? Options(method: method),
 //         );
-        
+
 //         return response.data as T;
 //       } on DioException catch (e) {
 //         lastError = e;
-        
+
 //         // Don't retry on client errors (4xx)
 //         if (e.response?.statusCode != null && e.response!.statusCode! >= 400 && e.response!.statusCode! < 500) {
 //           throw ApiException.fromDioError(e);
 //         }
-        
+
 //         attempts++;
 //         if (attempts == _maxRetries) break;
-        
+
 //         // Exponential backoff
 //         await Future.delayed(Duration(milliseconds: pow(2, attempts) * 1000));
 //       }
 //     }
-    
+
 //     throw ApiException.fromDioError(lastError!);
 //   }
 

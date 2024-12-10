@@ -1,23 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// final ThemeData appTheme = ThemeData(
-//   primarySwatch: Colors.blue,
-//   inputDecorationTheme: InputDecorationTheme(
-//     border: OutlineInputBorder(
-//       borderRadius: BorderRadius.circular(25),
-//     ),
-//     contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-//     labelStyle: const TextStyle(
-//       color: Colors.black,
-//       fontSize: 16,
-//     ),
-//     hintStyle: const TextStyle(
-//       color: Color(0XFF3b3abe),
-//       fontSize: 16,
-//     ),
-//   ),
-// );
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -52,6 +32,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
+          disabledBackgroundColor: Colors.blue,
         ),
       ),
     );

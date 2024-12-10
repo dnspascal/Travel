@@ -45,12 +45,28 @@ class AuthRepository implements IAuthRepository {
         'password': password,
       });
 
-      await _secureStorage.write(
-          key: 'access_token', value: response['access']);
-      await _secureStorage.write(
-          key: 'refresh_token', value: response['refresh']);
+      // await _secureStorage.write(
+      //     key: 'access_token', value: response['access_token'][0]);
+      // await _secureStorage.write(
+      //     key: 'refresh_token', value: response['refres_token'][0]);
 
-      
+      String? accessToken = response['access_token'] is String
+          ? response['access_token']
+          : response['access_token']?.first; // For a List<dynamic> fallback
+
+      String? refreshToken = response['refresh_token'] is String
+          ? response['refresh_token']
+          : response['refresh_token']?.first; // For a List<dynamic> fallback
+
+      if (accessToken != null && refreshToken != null) {
+        await _secureStorage.write(key: 'access_token', value: accessToken);
+        await _secureStorage.write(key: 'refresh_token', value: refreshToken);
+
+        print("SHIDA HIII");
+        print(await _secureStorage.read(key:'access_token'));
+      } else {
+        throw ApiException('Tokens are not valid');
+      }
     } on ApiException catch (e) {
       if (e.statusCode == 401) {
         throw ApiException('Invalid email or password');

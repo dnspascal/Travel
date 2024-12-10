@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class ApiException implements Exception {
   final String? message;
-  final int? statusCode;
-  final String? responseBody;  
+  final String? statusCode;
+  final String? responseBody;
 
   ApiException(this.message, {this.statusCode, this.responseBody});
 
@@ -14,14 +15,19 @@ class ApiException implements Exception {
 
   static ApiException fromDioError(DioException error) {
     String? responseBody;
+    debugPrint("$error, THIS IS WHAT IS CAUSING THE ERROR");
 
     if (error.response != null && error.response!.data != null) {
-      responseBody = error.response!.data.toString();
+      try {
+        responseBody = error.response!.data.toString();
+      } catch (e) {
+        responseBody = 'Error parsing response body: $e';
+      }
     }
 
     return ApiException(
       error.message,
-      statusCode: error.response?.statusCode,
+      statusCode: error.response?.statusCode?.toString(),
       responseBody: responseBody,
     );
   }

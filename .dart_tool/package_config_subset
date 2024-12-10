@@ -62,6 +62,14 @@ file
 3.0
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/file-7.0.1/
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/file-7.0.1/lib/
+flutter_animate
+2.17
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_animate-4.5.2/
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_animate-4.5.2/lib/
+flutter_hooks
+2.17
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_hooks-0.20.5/
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_hooks-0.20.5/lib/
 flutter_launcher_icons
 3.0
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_launcher_icons-0.14.1/
@@ -94,6 +102,10 @@ flutter_secure_storage_windows
 2.12
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_secure_storage_windows-3.1.2/
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_secure_storage_windows-3.1.2/lib/
+flutter_shaders
+2.19
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_shaders-0.1.3/
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_shaders-0.1.3/lib/
 flutter_svg
 3.4
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/flutter_svg-2.0.15/
@@ -158,6 +170,10 @@ logger
 2.17
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/logger-2.5.0/
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/logger-2.5.0/lib/
+lucide_icons
+2.12
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/lucide_icons-0.257.0/
+file:///Users/denismgaya/.pub-cache/hosted/pub.dev/lucide_icons-0.257.0/lib/
 matcher
 3.0
 file:///Users/denismgaya/.pub-cache/hosted/pub.dev/matcher-0.12.16+1/

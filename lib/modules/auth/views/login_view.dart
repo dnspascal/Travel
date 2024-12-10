@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:travel/routes/routes.dart';
+import 'package:travel/modules/auth/shared/social_login.dart';
 import 'package:travel/modules/auth/controllers/login_controller.dart';
 import 'package:travel/modules/auth/shared/custom_text_field.dart';
-import 'package:travel/modules/auth/shared/social_login.dart';
-import 'package:travel/routes/routes.dart';
-import 'package:travel/shared/loaders/dots.dart';
-import 'package:travel/shared/loaders/spinner.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -42,6 +40,7 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               const SizedBox(height: 32),
+              if (true) _wrongCredentials(),
               CustomTextField(
                 controller: controller.emailController,
                 label: 'Email',
@@ -105,8 +104,8 @@ class LoginView extends GetView<LoginController> {
                     child: Text(
                       'Forgot password',
                       style: TextStyle(
-                        color: Get.theme.primaryColor,
-                      ),
+                          color: Get.theme.primaryColor,
+                          fontWeight: FontWeight.w900),
                     ),
                   ),
                 ],
@@ -131,7 +130,9 @@ class LoginView extends GetView<LoginController> {
                         : const Text(
                             'Sign In',
                             style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 18.0),
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18.0,
+                                color: Colors.white),
                           ),
                   )),
               const SizedBox(height: 24),
@@ -143,15 +144,17 @@ class LoginView extends GetView<LoginController> {
                   child: RichText(
                     text: TextSpan(
                       text: 'Don\'t have an account? ',
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: Theme.of(context).textTheme.bodySmall,
                       children: [
                         const TextSpan(text: '  '),
                         TextSpan(
                           text: 'Sign up',
-                          style: TextStyle(
-                            color: Get.theme.primaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  color: Colors.blue.shade500,
+                                  fontWeight: FontWeight.w900),
                         ),
                       ],
                     ),
@@ -164,4 +167,28 @@ class LoginView extends GetView<LoginController> {
       ),
     );
   }
+}
+
+Widget _wrongCredentials() {
+  return Material(
+    elevation: 2,
+    color: Colors.redAccent,
+    borderRadius: BorderRadius.circular(8),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'This is a custom banner',
+            style: TextStyle(color: Colors.white),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
+            onPressed: () => {},
+          ),
+        ],
+      ),
+    ),
+  ).marginOnly(bottom: 16.0);
 }

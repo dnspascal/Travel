@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class Loader extends StatefulWidget {
   const Loader({Key? key}) : super(key: key);

@@ -16,7 +16,7 @@ class Travel extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialBinding: MainBinding(),
       getPages: Pages.pages,
-      initialRoute: Routes.login,
+      initialRoute: Routes.PROFILE,
       fallbackLocale: const Locale('en'),
       locale: Get.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
