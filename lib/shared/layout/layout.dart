@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:travel/core/controllers/navigation_controller.dart';
 import 'package:travel/shared/ui/app_bar.dart';
 import 'package:travel/shared/ui/bottom_navigation.dart';
@@ -16,12 +16,13 @@ class Layout extends GetView<NavigationController> {
       body: SafeArea(child: Container(child: child)),
       bottomNavigationBar: const BottomNavigation(),
       extendBody: true,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: controller.goToHome,
-        backgroundColor: Colors.white,
-        child: Icon(
-          Iconsax.message_text4,
-          color: Colors.blue.shade700,
+        backgroundColor: Colors.blue.shade900,
+        child: const Icon(
+          LucideIcons.loader,
+          color: Colors.white,
         ),
       ),
     );

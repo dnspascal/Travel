@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class BusTicketProfile extends StatefulWidget {
+  const BusTicketProfile({super.key});
+
   @override
   _BusTicketProfileState createState() => _BusTicketProfileState();
 }
@@ -112,53 +114,51 @@ class _BusTicketProfileState extends State<BusTicketProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 227, 236, 244),
-              Color.fromARGB(255, 245, 245, 245)
-            ],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 227, 236, 244),
+            Color.fromARGB(255, 245, 245, 245)
+          ],
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header
-              _buildHeader(),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            _buildHeader(),
 
-              // Navigation Indicator
-              // _buildNavigationIndicator(),
+            // Navigation Indicator
+            // _buildNavigationIndicator(),
 
-              // Scrollable Content
-              Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification) {
-                      _updateActiveSection(scrollNotification.metrics.pixels);
-                    }
-                    return true;
-                  },
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                      children: [
-                        _buildProfileSection(),
-                        _buildTripsSection(),
-                        _buildPaymentSection(),
-                      ],
-                    ),
+            // Scrollable Content
+            Expanded(
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollNotification) {
+                  if (scrollNotification is ScrollUpdateNotification) {
+                    _updateActiveSection(scrollNotification.metrics.pixels);
+                  }
+                  return true;
+                },
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    children: [
+                      _buildProfileSection(),
+                      _buildTripsSection(),
+                      _buildPaymentSection(),
+                    ],
                   ),
                 ),
               ),
+            ),
 
-              // Quick Actions
-              // _buildQuickActions(),
-            ],
-          ),
+            // Quick Actions
+            // _buildQuickActions(),
+          ],
         ),
       ),
     );

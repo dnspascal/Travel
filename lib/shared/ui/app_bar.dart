@@ -1,78 +1,6 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:iconsax/iconsax.dart';
-// import 'package:travel/core/controllers/locale_controller.dart';
-
-// class TravelBar extends StatelessWidget implements PreferredSizeWidget {
-//   const TravelBar({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return AppBar(
-//       automaticallyImplyLeading: false,
-//       elevation: 30.0,
-//       backgroundColor: Colors.transparent,
-//       flexibleSpace: Container(
-//         color: Colors.white,
-//       ),
-//       title: Row(
-//         children: [
-//           Image.asset(
-//             'assets/icons/app/app-icon.png',
-//             width: 20.0,
-//           ),
-//           const SizedBox(
-//             width: 8.0,
-//           ),
-//           const Text(
-//             'Travel',
-//             style: TextStyle(
-//               color: Colors.black,
-//               fontSize: 20,
-//               fontWeight: FontWeight.w900,
-//             ),
-//           ),
-//         ],
-//       ),
-//       actions: [
-//         ElevatedButton(
-//           onPressed: () {
-//             Get.find<LocaleController>().changeLanguage('sw');
-//           },
-//           child: const Text('switch'),
-//         ),
-//         Stack(
-//           clipBehavior: Clip.none,
-//           children: [
-//             const Icon(
-//               Iconsax.notification,
-//               color: Colors.black,
-//             ),
-//             Positioned(
-//               top: -4,
-//               right: -4,
-//               child: Container(
-//                 width: 12,
-//                 height: 12,
-//                 decoration: const BoxDecoration(
-//                   color: Colors.red,
-//                   shape: BoxShape.circle,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-
-//   @override
-//   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-// }
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:travel/core/controllers/locale_controller.dart';
 
 class TravelBar extends StatelessWidget implements PreferredSizeWidget {
@@ -81,7 +9,8 @@ class TravelBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx((){
+    return Obx(
+      () {
         return AppBar(
           automaticallyImplyLeading: false,
           elevation: 2.0,
@@ -189,24 +118,19 @@ class TravelBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             ),
-
-            // Notification Icon
             Stack(
               clipBehavior: Clip.none,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Icon(
-                    Iconsax.notification,
-                    color: Colors.black,
-                  ),
+                const Icon(
+                  LucideIcons.bell,
+                  color: Colors.black,
                 ),
                 Positioned(
-                  top: -4,
-                  right: 6,
+                  top: -2,
+                  right: 2,
                   child: Container(
-                    width: 12,
-                    height: 12,
+                    width: 6,
+                    height: 6,
                     decoration: const BoxDecoration(
                       color: Colors.red,
                       shape: BoxShape.circle,
@@ -215,6 +139,12 @@ class TravelBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ],
             ),
+            IconButton(
+                onPressed: () => {},
+                icon: const Icon(
+                  LucideIcons.settings,
+                  color: Colors.black,
+                )).marginAll(4)
           ],
         );
       },

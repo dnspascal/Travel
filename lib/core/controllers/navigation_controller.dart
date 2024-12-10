@@ -11,13 +11,16 @@ class NavigationController extends GetxController {
 
     switch (index) {
       case 0:
-        Get.offNamed(Routes.initial);
+        Get.offNamed(Routes.home);
         break;
       case 1:
-        // Get.offNamed(Routes.home);
+        Get.offNamed(Routes.explore);
         break;
       case 2:
-        // Get.offNamed(Routes.settings);
+        Get.offNamed(Routes.tickets);
+        break;
+      case 3:
+        Get.offNamed(Routes.profile);
         break;
     }
   }

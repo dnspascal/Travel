@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:travel/core/controllers/navigation_controller.dart';
 
@@ -10,6 +11,9 @@ class BottomNavigation extends GetView<NavigationController> {
   Widget build(BuildContext context) {
     return Obx(
       () => StylishBottomBar(
+        backgroundColor: Colors.blue.shade900,
+        gradient: LinearGradient(
+            colors: [Colors.blue.shade800, Colors.blue.shade900]),
         option: AnimatedBarOptions(
           iconSize: 32,
           iconStyle: IconStyle.Default,
@@ -20,11 +24,27 @@ class BottomNavigation extends GetView<NavigationController> {
         items: [
           BottomBarItem(
             icon: const Icon(
-              Icons.explore_outlined,
+              LucideIcons.home,
               size: 28,
             ),
             selectedIcon: const Icon(
-              Icons.explore,
+              LucideIcons.home,
+              size: 28,
+            ),
+            selectedColor: Colors.white30,
+            unSelectedColor: Colors.white,
+            title: const Text(
+              'Home',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+          ),
+          BottomBarItem(
+            icon: const Icon(
+              LucideIcons.compass,
+              size: 28,
+            ),
+            selectedIcon: const Icon(
+              LucideIcons.compass,
               size: 28,
             ),
             selectedColor: Colors.white30,
@@ -34,40 +54,39 @@ class BottomNavigation extends GetView<NavigationController> {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
           ),
-          // BottomBarItem(
-          //   icon: const Icon(
-          //     Icons.home_outlined,
-          //     size: 28,
-          //   ),
-          //   selectedIcon: const Icon(
-          //     Icons.home,
-          //     size: 28,
-          //   ),
-          //   selectedColor: Colors.white30,
-          //   unSelectedColor: Colors.white,
-          //   title: const Text(
-          //     'Home',
-          //     style: TextStyle(fontWeight: FontWeight.w900),
-          //   ),
-          // ),
           BottomBarItem(
             icon: const Icon(
-              Icons.settings_outlined,
+              LucideIcons.ticket,
               size: 28,
             ),
             selectedIcon: const Icon(
-              Icons.settings,
+              LucideIcons.ticket,
               size: 28,
             ),
             selectedColor: Colors.white30,
             unSelectedColor: Colors.white,
             title: const Text(
-              'Settings',
+              'My tickets',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+          ),
+          BottomBarItem(
+            icon: const Icon(
+              LucideIcons.user,
+              size: 28,
+            ),
+            selectedIcon: const Icon(
+              LucideIcons.user,
+              size: 28,
+            ),
+            selectedColor: Colors.white30,
+            unSelectedColor: Colors.white,
+            title: const Text(
+              'Profile',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
           ),
         ],
-        backgroundColor: Colors.blue,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10.0)),
         hasNotch: true,
         // fabLocation: StylishBarFabLocation.values,
