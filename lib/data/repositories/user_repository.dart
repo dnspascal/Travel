@@ -13,9 +13,10 @@ class UserRepository implements IUser {
   Future<User> getUser() async {
     try {
       final response = await _apiService.get('/user');
+      print(response);
 
       final userDTO = UserDTO.fromJson(response);
-
+     
       return userDTO.toDomain();
     } catch (e) {
       throw ApiException('Failed to fetch user data: $e');

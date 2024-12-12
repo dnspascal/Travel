@@ -26,7 +26,7 @@ class AuthBinding extends Bindings {
 
     Get.lazyPut(() => const FlutterSecureStorage());
     Get.lazyPut(() => ApiService(Get.find(), Get.find()));
-    Get.lazyPut(() => LoginController(Get.find(), Get.find()));
+    Get.lazyPut(() => LoginController(Get.find(), Get.find(), Get.find()));
 
     // // Validators
     // Get.lazyPut(() => EmailValidator());
@@ -49,7 +49,6 @@ class AuthBinding extends Bindings {
         ));
     Get.lazyPut(() => LoginUseCase(
           Get.find(),
-          // Get.find(),
         ));
     Get.lazyPut(() => UserUsecase(
           Get.find(),

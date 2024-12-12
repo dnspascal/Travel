@@ -5,7 +5,7 @@ class LoginUseCase {
   // final IEmailValidator _emailValidator;
 
   LoginUseCase(
-    this._authRepository,
+    this._authRepository, 
     // this._emailValidator
   );
 

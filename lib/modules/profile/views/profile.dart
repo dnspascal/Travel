@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:travel/modules/profile/controllers/profile_controller.dart';
 
 class BusTicketProfile extends StatefulWidget {
   const BusTicketProfile({super.key});
@@ -12,6 +16,7 @@ class _BusTicketProfileState extends State<BusTicketProfile> {
   bool isEditing = false;
   String activeSection = 'profile';
   ScrollController scrollController = ScrollController();
+  final useDetails = Get.find<ProfileController>();
 
   Map<String, dynamic> profile = {
     'name': "Alex Thompson",
@@ -267,7 +272,6 @@ class _BusTicketProfileState extends State<BusTicketProfile> {
             ),
           ),
 
-          // Profile Details
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -288,17 +292,17 @@ class _BusTicketProfileState extends State<BusTicketProfile> {
                 _buildProfileField(
                   LucideIcons.user,
                   'Full Name',
-                  'name',
+                  useDetails.userDetails['name'],
                 ),
                 _buildProfileField(
                   LucideIcons.mail,
                   'Email',
-                  'email',
+                  useDetails.userDetails['email'],
                 ),
                 _buildProfileField(
                   LucideIcons.phone,
                   'Phone',
-                  'phone',
+                  useDetails.userDetails['phone_number'],
                 ),
               ],
             ),
@@ -341,7 +345,7 @@ class _BusTicketProfileState extends State<BusTicketProfile> {
                         ),
                       )
                     : Text(
-                        profile[key],
+                        key,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w900,

@@ -45,11 +45,7 @@ class AuthRepository implements IAuthRepository {
         'password': password,
       });
 
-      // await _secureStorage.write(
-      //     key: 'access_token', value: response['access_token'][0]);
-      // await _secureStorage.write(
-      //     key: 'refresh_token', value: response['refres_token'][0]);
-
+      
       String? accessToken = response['access_token'] is String
           ? response['access_token']
           : response['access_token']?.first; // For a List<dynamic> fallback

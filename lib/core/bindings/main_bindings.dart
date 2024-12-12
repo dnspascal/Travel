@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+import 'package:travel/core/services/storage.dart';
 import 'package:travel/core/controllers/home_controller.dart';
 import 'package:travel/core/controllers/locale_controller.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:travel/core/controllers/navigation_controller.dart';
 
 class MainBinding extends Bindings {
@@ -10,7 +12,10 @@ class MainBinding extends Bindings {
     Get.put(NavigationController(), permanent: true);
     Get.put(HomeController());
 
+    Get.lazyPut(() => const FlutterSecureStorage());
+
     // Core services
+    Get.put(StorageService(Get.find()), permanent: true);
     // Get.put(ApiService(), permanent: true);
     // Get.put(LocalStorage(), permanent: true);
     // Get.put(ConnectivityService(), permanent: true);

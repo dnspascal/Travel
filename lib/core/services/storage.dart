@@ -1,21 +1,19 @@
-// import 'package:get_storage/get_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// class StorageService {
-//   static final _box = GetStorage();
+class StorageService {
+  final FlutterSecureStorage _secureStorage;
 
-//   static Future<void> init() async {
-//     await GetStorage.init();
-//   }
+  StorageService(this._secureStorage);
 
-//   static Future<void> write(String key, dynamic value) async {
-//     await _box.write(key, value);
-//   }
+  Future<void> write(String key, String value) async {
+    await _secureStorage.write(key: key, value: value);
+  }
 
-//   static T? read<T>(String key) {
-//     return _box.read<T>(key);
-//   }
+  Future<String?> read(String key) async {
+    return await _secureStorage.read(key: key);
+  }
 
-//   static Future<void> remove(String key) async {
-//     await _box.remove(key);
-//   }
-// }
+  Future<void> remove(String key) async {
+    await _secureStorage.delete(key: key);
+  }
+}

@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travel/core/services/storage.dart';
 import 'package:travel/domains/entities/profile.dart';
 
-class ProfileController extends GetxController 
+class ProfileController extends GetxController
     with GetSingleTickerProviderStateMixin {
+  final StorageService _storageService;
+  late Map<String, dynamic> userDetails;
+
+  ProfileController(this._storageService);
   final Rx<ProfileModel> _profile = ProfileModel(
     name: "Alex Thompson",
     email: "alex.thompson@travel.com",
@@ -14,19 +21,17 @@ class ProfileController extends GetxController
     loyaltyPoints: 1250,
     upcomingTrips: [
       TripModel(
-        id: 1, 
-        from: "Boston", 
-        to: "New York", 
-        date: "2024-03-15", 
-        time: "09:00 AM"
-      ),
+          id: 1,
+          from: "Boston",
+          to: "New York",
+          date: "2024-03-15",
+          time: "09:00 AM"),
       TripModel(
-        id: 2, 
-        from: "New York", 
-        to: "Philadelphia", 
-        date: "2024-03-22", 
-        time: "02:30 PM"
-      ),
+          id: 2,
+          from: "New York",
+          to: "Philadelphia",
+          date: "2024-03-22",
+          time: "02:30 PM"),
     ],
   ).obs;
 
@@ -36,34 +41,33 @@ class ProfileController extends GetxController
   late TabController tabController;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     tabController = TabController(length: 3, vsync: this);
+
+    final String? storedDetails = await _storageService.read('user-details');
+    userDetails = jsonDecode(storedDetails!);
+    // print("THESE ARE USER DEATAILS");
+    // print(userDetails);
     startAnimations();
   }
 
   void startAnimations() {
     // Trips animation
     ever(
-      animatedTrips, 
-      (value) => value < _profile.value.trips 
-        ? Future.delayed(
-            const Duration(milliseconds: 10), 
-            () => animatedTrips.value++
-          ) 
-        : null
-    );
+        animatedTrips,
+        (value) => value < _profile.value.trips
+            ? Future.delayed(
+                const Duration(milliseconds: 10), () => animatedTrips.value++)
+            : null);
 
     // Points animation
     ever(
-      animatedPoints, 
-      (value) => value < _profile.value.loyaltyPoints 
-        ? Future.delayed(
-            const Duration(milliseconds: 20), 
-            () => animatedPoints.value += 10
-          ) 
-        : null
-    );
+        animatedPoints,
+        (value) => value < _profile.value.loyaltyPoints
+            ? Future.delayed(const Duration(milliseconds: 20),
+                () => animatedPoints.value += 10)
+            : null);
 
     animatedTrips.value = 0;
     animatedPoints.value = 0;

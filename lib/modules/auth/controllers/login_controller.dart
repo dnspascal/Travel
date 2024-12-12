@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
-import 'package:travel/domains/entities/user.dart';
+import 'package:travel/core/services/storage.dart';
 import 'package:travel/domains/usecases/auth/login_usecase.dart';
 import 'package:travel/domains/usecases/user/use_usecase.dart';
 import 'package:travel/routes/routes.dart';
@@ -9,6 +10,7 @@ import 'package:travel/routes/routes.dart';
 class LoginController extends GetxController {
   final LoginUseCase _loginUseCase;
   final UserUsecase _getUserUseCase;
+  final StorageService _storageService;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -19,8 +21,9 @@ class LoginController extends GetxController {
   var passwordErrorMessage = ''.obs;
   var errorMessage = ''.obs;
   final rememberMe = false.obs;
-  var user = Rxn<User>();
-  LoginController(this._loginUseCase, this._getUserUseCase);
+
+  LoginController(
+      this._loginUseCase, this._getUserUseCase, this._storageService);
 
   @override
   void onInit() {
@@ -89,8 +92,8 @@ class LoginController extends GetxController {
         await _saveCredentials();
       }
 
-      final userData = await _getUserUseCase.call();
-      user.value = userData;
+      final userDetails = await _getUserUseCase.call();
+      await _storageService.write("user-details", jsonEncode(userDetails));
 
       Get.offAllNamed(Routes.home);
     } on ApiException catch (e, stackTrace) {
