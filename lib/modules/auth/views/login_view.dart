@@ -40,7 +40,8 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               const SizedBox(height: 32),
-              if (true) _wrongCredentials(),
+              if (true)
+                _wrongCredentials(controller.errorMessage, controller.isError),
               CustomTextField(
                 controller: controller.emailController,
                 label: 'Email',
@@ -169,26 +170,33 @@ class LoginView extends GetView<LoginController> {
   }
 }
 
-Widget _wrongCredentials() {
-  return Material(
-    elevation: 2,
-    color: Colors.redAccent,
-    borderRadius: BorderRadius.circular(8),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'This is a custom banner',
-            style: TextStyle(color: Colors.white),
-          ),
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white),
-            onPressed: () => {},
-          ),
-        ],
-      ),
-    ),
-  ).marginOnly(bottom: 16.0);
+Widget _wrongCredentials(message, show) {
+  return Obx(() => Visibility(
+        visible: show.value,
+        child: Material(
+          elevation: 0.0,
+          color: Colors.red.shade600,
+          borderRadius: BorderRadius.circular(3),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Obx(() => Text(
+                      message.value,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          overflow: TextOverflow.ellipsis),
+                      maxLines: 1,
+                    )).paddingOnly(left: 10),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => {},
+              ),
+            ],
+          ).paddingSymmetric(vertical: 0.0, horizontal: 12.0),
+        ).marginOnly(bottom: 16.0),
+      ));
 }

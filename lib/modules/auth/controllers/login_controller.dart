@@ -19,7 +19,9 @@ class LoginController extends GetxController {
   final isPasswordVisible = false.obs;
   var emailErrorMessage = ''.obs;
   var passwordErrorMessage = ''.obs;
-  var errorMessage = ''.obs;
+  RxString errorMessage = ''.obs;
+  RxBool isError = false.obs;
+
   final rememberMe = false.obs;
 
   LoginController(
@@ -98,6 +100,7 @@ class LoginController extends GetxController {
       Get.offAllNamed(Routes.home);
     } on ApiException catch (e, stackTrace) {
       errorMessage.value = e.message ?? '';
+      isError.value = true;
 
       print(e.message);
       print(stackTrace);

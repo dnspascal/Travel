@@ -11,12 +11,17 @@ import 'package:travel/domains/usecases/auth/register_usecase.dart';
 import 'package:travel/domains/usecases/user/use_usecase.dart';
 import 'package:travel/modules/auth/controllers/auth_controller.dart';
 import 'package:travel/modules/auth/controllers/login_controller.dart';
+import 'package:travel/modules/auth/controllers/register_controller.dart';
 // import 'package:travel/data/services/api_service.dart';
 // import 'package:travel/domains/repositories/auth_repository.dart';
 
 class AuthBinding extends Bindings {
   @override
   void dependencies() {
+
+    Get.lazyPut<MultiStepRegistrationController>(
+      () => MultiStepRegistrationController(),
+    );
     // Core services
     Get.lazyPut(() => Dio(BaseOptions(
         // baseUrl: 'http://127.0.0.1:8517/',

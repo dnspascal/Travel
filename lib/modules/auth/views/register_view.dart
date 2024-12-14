@@ -1,11 +1,12 @@
+import 'dart:io';
+import 'package:get/get.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:travel/modules/auth/controllers/auth_controller.dart';
-import 'package:travel/modules/auth/shared/custom_text_field.dart';
 import 'package:travel/routes/routes.dart';
 import 'package:travel/shared/loaders/spinner.dart';
+import 'package:travel/modules/auth/shared/custom_text_field.dart';
+import 'package:travel/modules/auth/controllers/auth_controller.dart';
 
 class SignUpView extends GetView<AuthController> {
   SignUpView({super.key});
@@ -212,6 +213,7 @@ class SignUpView extends GetView<AuthController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    if(Platform.isIOS)
                     _buildSocialButton('assets/icons/svg/apple.svg'),
                     const SizedBox(
                       width: 20.0,

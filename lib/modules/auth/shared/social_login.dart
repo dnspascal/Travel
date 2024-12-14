@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:travel/modules/auth/shared/social_button.dart';
@@ -31,10 +32,11 @@ class SocialLoginSection extends StatelessWidget {
               iconPath: 'assets/icons/svg/google.svg',
             ),
             const SizedBox(width: 16),
-            SocialButton(
-              onTap: () {},
-              iconPath: 'assets/icons/svg/apple.svg',
-            ),
+            if (Platform.isIOS)
+              SocialButton(
+                onTap: () {},
+                iconPath: 'assets/icons/svg/apple.svg',
+              ),
             const SizedBox(width: 16),
             SocialButton(
               onTap: () {},

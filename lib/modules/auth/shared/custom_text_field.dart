@@ -18,7 +18,7 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     required this.label,
     required this.hint,
-    required this.prefixIcon,
+    this.prefixIcon=Icons.abc,
     this.isPassword = false,
     this.validator,
     this.inputFormatters,

@@ -15,50 +15,48 @@ class ApiService {
     _dio.options.baseUrl = 'https://monarch-live-quickly.ngrok-free.app/';
   }
 
-void _setupInterceptors() {
-  _dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-      print("Intercepting request for path: ${options.path}");
-      if (!_publicEndpoints.any((endpoint) => options.path.contains(endpoint))) {
-        print("Private endpoint detected");
-        _accessToken ??= await _secureStorage.read(key: 'access_token');
-        if (_accessToken != null) {
-          options.headers['Authorization'] = 'Bearer $_accessToken';
-          print("Authorization header added: Bearer $_accessToken");
-        } else {
-          print("No access token available for private endpoint");
+  void _setupInterceptors() {
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        print("Intercepting request for path: ${options.path}");
+        if (!_publicEndpoints
+            .any((endpoint) => options.path.contains(endpoint))) {
+          print("Private endpoint detected");
+          _accessToken ??= await _secureStorage.read(key: 'access_token');
+          if (_accessToken != null) {
+            options.headers['Authorization'] = 'Bearer $_accessToken';
+            print("Authorization header added: Bearer $_accessToken");
+          } else {
+            print("No access token available for private endpoint");
+          }
         }
-      }
-      handler.next(options);
-    },
-    onError: (error, handler) async {
-      if (error.response?.statusCode == 401) {
-        final isRefreshed = await _handleTokenExpiration();
-        if (isRefreshed) {
-          final options = error.response!.requestOptions;
-          options.headers['Authorization'] = 'Bearer $_accessToken';
-          final retryResponse = await _dio.request(
-            options.path,
-            options: Options(
-              method: options.method,
-              headers: options.headers,
-              contentType: options.contentType,
-            ),
-            data: options.data,
-            queryParameters: options.queryParameters,
-          );
-          return handler.resolve(retryResponse);
-        } else {
-          Get.offAllNamed('/login');
+        handler.next(options);
+      },
+      onError: (error, handler) async {
+        if (error.response?.statusCode == 401) {
+          final isRefreshed = await _handleTokenExpiration();
+          if (isRefreshed) {
+            final options = error.response!.requestOptions;
+            options.headers['Authorization'] = 'Bearer $_accessToken';
+            final retryResponse = await _dio.request(
+              options.path,
+              options: Options(
+                method: options.method,
+                headers: options.headers,
+                contentType: options.contentType,
+              ),
+              data: options.data,
+              queryParameters: options.queryParameters,
+            );
+            return handler.resolve(retryResponse);
+          } else {
+            Get.offAllNamed('/login');
+          }
         }
-      }
-      handler.next(error);
-    },
-  ));
-}
-
-
-
+        handler.next(error);
+      },
+    ));
+  }
 
   Future<bool> _handleTokenExpiration() async {
     try {
@@ -80,47 +78,96 @@ void _setupInterceptors() {
     return false;
   }
 
-  Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
-      {Map<String, dynamic>? headers}) async {
-    try {
-      if (!_publicEndpoints.contains(endpoint) && headers == null) {
-        throw ApiException('Headers are required for this endpoint.');
-      }
+  // Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
+  //     {Map<String, dynamic>? headers}) async {
+  //   try {
+  //     // if (!_publicEndpoints.contains(endpoint) && headers == null) {
+  //     //   throw ApiException('Headers are required for this endpoint.');
+  //     // }
 
-      final response = await _dio.post(
-        endpoint,
-        data: data,
-        options: Options(headers: headers),
-      );
-      return response.data;
-    } catch (e) {
-      if (e is DioException) {
-        final errorData = e.response?.data;
-        if (errorData != null) {
+  //     debugPrint('Attempting POST request to $endpoint with data: $data and headers: $headers');
+
+  //   final response = await _dio.post(
+  //     endpoint,
+  //     data: data,
+  //     options: Options(headers: headers),
+  //   );
+
+  //   debugPrint("WE ARE PRINTING HERE NOW ON THE SERVICE");
+  //   debugPrint(response.toString());
+  //     return response.data;
+  //   } catch (e) {
+  //     if (e is DioException) {
+  //       final errorData = e.response?.data;
+  //       if (errorData != null) {
+  //         final errorMessage = errorData['message'] ?? 'Unknown error';
+  //         final errorStatus = errorData['status'] ?? 3;
+
+  //         throw ApiException(
+  //           errorMessage,
+  //           statusCode: errorStatus,
+  //         );
+  //       }
+  //       throw ApiException.fromDioError(e);
+  //     } else {
+  //       throw ApiException('Unknown error: ${e.toString()}');
+  //     }
+  //   }
+  // }
+
+  Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data, {Map<String, dynamic>? headers}) async {
+  try {
+    if (!_publicEndpoints.contains(endpoint) && headers == null) {
+      throw ApiException('Headers are required for this endpoint.');
+    }
+
+    final response = await _dio.post(
+      endpoint,
+      data: data,
+      options: Options(headers: headers),
+    );
+
+    print("Response Data: ${response.data}");
+
+    // Check if the response is an error message (status not 1)
+    if (response.data['status'] != 1) {
+      throw ApiException(response.data['message'] ?? 'Unknown error');
+    }
+
+    return response.data;
+  } catch (e) {
+    print("Error occurred: $e");
+
+    if (e is DioException) {
+      final errorData = e.response?.data;
+      if (errorData != null) {
+        // Handle specific cases based on error structure
+        if (errorData is Map && errorData.containsKey('status')) {
           final errorMessage = errorData['message'] ?? 'Unknown error';
           final errorStatus = errorData['status'] ?? 3;
-
-          throw ApiException(
-            errorMessage,
-            statusCode: errorStatus,
-          );
+          throw ApiException(errorMessage, statusCode: errorStatus);
+        } else if (errorData is List) {
+          // Handle list errors
+          throw ApiException(errorData.join(', '), statusCode: '401');
         }
-        throw ApiException.fromDioError(e);
-      } else {
-        throw ApiException('Unknown error: ${e.toString()}');
       }
+      throw ApiException.fromDioError(e);
+    } else {
+      throw ApiException('Unknown error: ${e.toString()}');
     }
-  }
-
-  Future get(String endpoint, {Map<String, dynamic>? headers}) async {
-  try {
-    final response = await _dio.get(endpoint, options: Options(headers: headers));
-    return response.data;
-  } on DioException catch (e) {
-    throw ApiException.fromDioError(e);
   }
 }
 
+
+  Future get(String endpoint, {Map<String, dynamic>? headers}) async {
+    try {
+      final response =
+          await _dio.get(endpoint, options: Options(headers: headers));
+      return response.data;
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
 
   // Future get(String endpoint, {Map<String, dynamic>? headers}) async {
   //   try {

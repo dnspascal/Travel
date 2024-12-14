@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
 import 'package:travel/data/models/user_dto.dart';
@@ -45,30 +46,31 @@ class AuthRepository implements IAuthRepository {
         'password': password,
       });
 
-      
-      String? accessToken = response['access_token'] is String
-          ? response['access_token']
-          : response['access_token']?.first; // For a List<dynamic> fallback
+      debugPrint('Response: $response');
+      return;
 
-      String? refreshToken = response['refresh_token'] is String
-          ? response['refresh_token']
-          : response['refresh_token']?.first; // For a List<dynamic> fallback
+      // String? accessToken = response['access_token'] is String
+      //     ? response['access_token']
+      //     : response['access_token']?.first;
 
-      if (accessToken != null && refreshToken != null) {
-        await _secureStorage.write(key: 'access_token', value: accessToken);
-        await _secureStorage.write(key: 'refresh_token', value: refreshToken);
+      // String? refreshToken = response['refresh_token'] is String
+      //     ? response['refresh_token']
+      //     : response['refresh_token']?.first;
 
-        print("SHIDA HIII");
-        print(await _secureStorage.read(key:'access_token'));
-      } else {
-        throw ApiException('Tokens are not valid');
-      }
+      // if (accessToken != null && refreshToken != null) {
+      //   await _secureStorage.write(key: 'access_token', value: accessToken);
+      //   await _secureStorage.write(key: 'refresh_token', value: refreshToken);
+      // } else {
+      //   throw ApiException('Tokens are not valid');
+      // }
     } on ApiException catch (e) {
       if (e.statusCode == 401) {
         throw ApiException('Invalid email or password');
       }
       throw ApiException('Login failed: ${e.message}');
     } catch (e) {
+      print("THIS IS THE ERROR EXCEPTION");
+      print(e);
       throw ApiException('An unexpected error occurred: $e');
     }
   }
