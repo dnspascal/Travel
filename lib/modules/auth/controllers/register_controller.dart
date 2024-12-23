@@ -1,7 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:travel/core/exceptions/api_exception.dart';
+import 'package:travel/domains/entities/user.dart';
+import 'package:travel/domains/usecases/auth/register_usecase.dart';
 
 class MultiStepRegistrationController extends GetxController {
+  final RegisterUseCase _registerUseCase;
+
+  MultiStepRegistrationController(this._registerUseCase);
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -18,6 +25,13 @@ class MultiStepRegistrationController extends GetxController {
 
   final _isTermsAccepted = false.obs;
   bool get isTermsAccepted => _isTermsAccepted.value;
+  final isLoading = false.obs;
+  final user = Rxn<User>();
+  final errorMessage = "".obs;
+  final isPasswordVisible = false.obs;
+  final registrationError = false.obs;
+
+  // var labelColor
 
   RxBool firstNameFocused = false.obs;
   RxBool secondNameFocused = false.obs;
@@ -94,7 +108,8 @@ class MultiStepRegistrationController extends GetxController {
     }
   }
 
-  void submitRegistration() {
+  Future<void> submitRegistration() async {
+    registrationError.value = false;
     if (thirdStepKey.currentState?.validate() ?? false) {
       if (!isTermsAccepted) {
         Get.snackbar(
@@ -107,14 +122,60 @@ class MultiStepRegistrationController extends GetxController {
         return;
       }
 
-      // Perform registration logic here
-      Get.snackbar(
-        'Success',
-        'Registration Completed Successfully',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade400,
-        colorText: Colors.white,
-      );
+      try {
+        isLoading.value = true;
+        errorMessage.value = "";
+
+        final registeredUser = await _registerUseCase.execute(
+          email: emailController.text,
+          password: passwordController.text,
+          firstName: firstNameController.text,
+          secondName: lastNameController.text,
+          phoneNumber: phoneController.text,
+        );
+
+        user.value = registeredUser;
+        Get.offAllNamed('/home');
+      } on ApiException catch (e) {
+        errorMessage.value = e.message!;
+        registrationError.value = true;
+        SnackBar customSnackBar(String message) {
+          return SnackBar(
+            content: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: Text(
+                message,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14.0, color: Colors.white),
+              ),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+            margin: const EdgeInsets.all(15.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'Action',
+              textColor: Colors.white,
+              onPressed: () {
+                // Action code
+              },
+            ),
+          );
+        }
+      } catch (e) {
+        errorMessage.value = "Unexpected Error Occured.";
+        registrationError.value = true;
+      } finally {
+        isLoading.value = false;
+      }
+
+
+    
     }
   }
 

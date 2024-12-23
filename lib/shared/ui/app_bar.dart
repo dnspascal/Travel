@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:travel/core/controllers/locale_controller.dart';
+import 'package:travel/modules/locale/controllers/locale_controller.dart';
 
 class TravelBar extends StatelessWidget implements PreferredSizeWidget {
   TravelBar({super.key});

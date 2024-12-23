@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:travel/core/exceptions/api_exception.dart';
+import 'package:travel/routes/routes.dart';
 import 'package:travel/core/services/storage.dart';
+import 'package:travel/core/exceptions/api_exception.dart';
 import 'package:travel/domains/usecases/auth/login_usecase.dart';
 import 'package:travel/domains/usecases/user/use_usecase.dart';
-import 'package:travel/routes/routes.dart';
 
 class LoginController extends GetxController {
   final LoginUseCase _loginUseCase;
@@ -22,7 +22,13 @@ class LoginController extends GetxController {
   RxString errorMessage = ''.obs;
   RxBool isError = false.obs;
 
+  RxBool emailFocused = false.obs;
+  RxBool passwordFocused = false.obs;
+
   final rememberMe = false.obs;
+
+    FocusNode emailFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
 
   LoginController(
       this._loginUseCase, this._getUserUseCase, this._storageService);

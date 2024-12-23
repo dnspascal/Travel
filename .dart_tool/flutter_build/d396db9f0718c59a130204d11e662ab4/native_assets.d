@@ -1,0 +1,1 @@
+ /Users/denismgaya/devs/apps/Travel/.dart_tool/flutter_build/d396db9f0718c59a130204d11e662ab4/native_assets.yaml: 

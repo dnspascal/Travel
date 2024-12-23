@@ -18,9 +18,8 @@ import 'package:travel/modules/auth/controllers/register_controller.dart';
 class AuthBinding extends Bindings {
   @override
   void dependencies() {
-
     Get.lazyPut<MultiStepRegistrationController>(
-      () => MultiStepRegistrationController(),
+      () => MultiStepRegistrationController(Get.find()),
     );
     // Core services
     Get.lazyPut(() => Dio(BaseOptions(

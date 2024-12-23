@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 class ApiException implements Exception {
   final String? message;
@@ -15,7 +14,6 @@ class ApiException implements Exception {
 
   static ApiException fromDioError(DioException error) {
     String? responseBody;
-    debugPrint("$error, THIS IS WHAT IS CAUSING THE ERROR");
 
     if (error.response != null && error.response!.data != null) {
       try {
@@ -26,7 +24,7 @@ class ApiException implements Exception {
     }
 
     return ApiException(
-      error.message,
+      '${error.message}',
       statusCode: error.response?.statusCode?.toString(),
       responseBody: responseBody,
     );

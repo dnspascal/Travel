@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:travel/core/exceptions/api_exception.dart';
@@ -16,7 +18,7 @@ class AuthRepository implements IAuthRepository {
   Future<User> register(String email, String password, String firstName,
       String secondName, String phoneNumber) async {
     try {
-      final response = await _apiService.post('/register', {
+      final response = await _apiService.post('/auth/register', {
         'email': email,
         'password': password,
         'first_name': firstName,
@@ -24,14 +26,20 @@ class AuthRepository implements IAuthRepository {
         'phone_number': phoneNumber,
       });
 
-      await _secureStorage.write(key: 'auth_token', value: response['token']);
-
       final userDto = UserDTO.fromJson(response['user']);
       return userDto.toDomain();
     } on ApiException catch (e) {
       if (e.statusCode == 409) {
         throw ApiException('Email already registered');
       }
+
+      debugPrint("${e.message.runtimeType}");
+      debugPrint(e.message);
+      // if (e.message != null) {
+      print("THIS IS NEW US");
+      print(jsonDecode(e.message!).runtimeType);
+      // }
+
       throw ApiException('Registration failed: ${e.message}');
     } catch (e) {
       throw ApiException('An unexpected error occurred: $e');
@@ -41,7 +49,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<void> login(String email, String password) async {
     try {
-      final response = await _apiService.post('/login', {
+      final response = await _apiService.post('/auth/login', {
         'email': email,
         'password': password,
       });
@@ -69,8 +77,6 @@ class AuthRepository implements IAuthRepository {
       }
       throw ApiException('Login failed: ${e.message}');
     } catch (e) {
-      print("THIS IS THE ERROR EXCEPTION");
-      print(e);
       throw ApiException('An unexpected error occurred: $e');
     }
   }

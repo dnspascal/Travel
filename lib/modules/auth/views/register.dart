@@ -36,7 +36,7 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
           _buildAppBar(context),
           Obx(() => _buildProgressIndicator(context)),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.35,
+            height: MediaQuery.of(context).size.height * 0.4,
             child: PageView(
               controller: pageController,
               physics: const NeverScrollableScrollPhysics(),
@@ -46,7 +46,7 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
                 _buildThirdStep(context),
               ],
             ),
-          ),
+          ).marginOnly(top: 50),
           Obx(() => _buildNavigationButtons(pageController, context)),
           const SocialRegistration()
         ],
@@ -73,7 +73,7 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
                 style: GoogleFonts.quicksand(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 1.5,
+                  letterSpacing: 1,
                 ),
               ),
               const Text(' 👋'),
@@ -149,7 +149,7 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
               fontSize: 24,
             ),
           ),
-          const SizedBox(height: 20),
+          const Gap(20),
           CustomTextField(
             controller: controller.firstNameController,
             label: 'First Name',
@@ -158,8 +158,11 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
             icon: LucideIcons.user,
             focusNode: controller.firstNameFocusNode,
             focusState: controller.firstNameFocused,
+             onChanged: (value) {
+                   controller.firstStepKey.currentState?.validate();
+                },
           ),
-          const SizedBox(height: 16),
+          const Gap( 16),
           CustomTextField(
             controller: controller.lastNameController,
             label: 'Last Name',
@@ -168,6 +171,9 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
             icon: LucideIcons.user,
             focusNode: controller.secondNameFocusNode,
             focusState: controller.secondNameFocused,
+               onChanged: (value) {
+                   controller.firstStepKey.currentState?.validate();
+                },
           ),
         ],
       ),
@@ -196,6 +202,9 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
             icon: Icons.email_outlined,
             focusNode: controller.emailFocusNode,
             focusState: controller.emailFocused,
+            onChanged: (value) {
+                   controller.secondStepKey.currentState?.validate();
+                },
           ),
           const SizedBox(height: 16),
           CustomTextField(
@@ -211,6 +220,10 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
             icon: Icons.phone_outlined,
             focusNode: controller.phoneFocusNode,
             focusState: controller.phoneFocused,
+             onChanged: (value) {
+                   controller.secondStepKey.currentState?.validate();
+                },
+            
           ),
         ],
       ),
@@ -220,8 +233,9 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
   Widget _buildThirdStep(BuildContext context) {
     return Form(
       key: controller.thirdStepKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
         children: [
           Text(
             'Secure Your Account',
@@ -239,6 +253,9 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
             icon: Icons.lock_outline,
             focusNode: controller.passwordFocusNode,
             focusState: controller.passwordFocused,
+             onChanged: (value) {
+                   controller.thirdStepKey.currentState?.validate();
+                },
           ),
           const SizedBox(height: 16),
           CustomTextField(
@@ -250,8 +267,14 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
             icon: Icons.lock_outline,
             focusNode: controller.confirmPasswordFocusNode,
             focusState: controller.confirmPasswordFocused,
+             onChanged: (value) {
+                   controller.thirdStepKey.currentState?.validate();
+                },
           ),
           const SizedBox(height: 16),
+          Obx(() => controller.registrationError.value
+              ? _errorMessage(controller.errorMessage.value)
+              : const SizedBox.shrink()),
           Row(
             children: [
               Obx(() => Checkbox(
@@ -263,16 +286,17 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
                     },
                     activeColor: const Color(0xFF4169E1),
                   )),
-              Expanded(
-                child: Text(
-                  'I accept the Terms of Service and Privacy Policy',
-                  style: GoogleFonts.quicksand(
-                    fontSize: 14,
-                  ),
+              Text(
+                'I accept the Terms of Service and Privacy Policy',
+                style: GoogleFonts.quicksand(
+                  fontSize: 14,
                 ),
               ),
+             
             ],
           ),
+          
+   
         ],
       ),
     );
@@ -328,6 +352,7 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
               }
             },
             style: ElevatedButton.styleFrom(
+              //fixedSize: const Size(150, 50),
               backgroundColor: Colors.blueAccent.shade700,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -338,25 +363,34 @@ class RegistrationView extends GetView<MultiStepRegistrationController> {
                 vertical: 12,
               ),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (controller.currentStep == 2)
-                  const Icon(LucideIcons.checkCircle, size: 18),
-                const Gap(8),
-                Text(
-                  controller.currentStep == 2 ? 'Submit' : 'Next',
-                  style: GoogleFonts.quicksand(
-                      fontWeight: FontWeight.w700, ),
-                ),
-                const Gap(8),
-                if (controller.currentStep < 2)
-                  const Icon(
-                    LucideIcons.chevronRight,
-                    // size: 18,
-                  )
-              ],
-            ),
+            child: controller.isLoading.value
+                ? const SizedBox(
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 1,
+                    ))
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (controller.currentStep == 2)
+                        const Icon(LucideIcons.checkCircle, size: 18),
+                      const Gap(8),
+                      Text(
+                        controller.currentStep == 2 ? 'Submit' : 'Next',
+                        style: GoogleFonts.quicksand(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const Gap(8),
+                      if (controller.currentStep < 2)
+                        const Icon(
+                          LucideIcons.chevronRight,
+                          // size: 18,
+                        )
+                    ],
+                  ),
           ),
         ],
       ),
@@ -413,4 +447,49 @@ class FadingDividerPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+Widget _errorMessage(e) {
+  return Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(
+        color: Colors.red.shade500,
+        width: 1.5,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.red.shade100.withOpacity(0.5),
+          blurRadius: 10,
+          offset: const Offset(0, 4),
+        )
+      ],
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.error_outline,
+          color: Colors.red.shade600,
+          size: 24,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            e,
+            style: TextStyle(
+              color: Colors.red.shade800,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              height: 1.4,
+            ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    ),
+  );
 }

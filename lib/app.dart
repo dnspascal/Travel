@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:travel/core/bindings/main_bindings.dart';
 import 'package:travel/core/theme/theme.dart';
+import 'package:travel/modules/locale/views/splash_screen.dart';
 import 'package:travel/routes/pages.dart';
 import 'package:travel/routes/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,7 +17,8 @@ class Travel extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialBinding: MainBinding(),
       getPages: Pages.pages,
-      initialRoute: Routes.login,
+      // initialRoute: Routes.login,
+      home:const SplashScreen(),
       fallbackLocale: const Locale('en'),
       locale: Get.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
